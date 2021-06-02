@@ -1,9 +1,31 @@
-import ext_nock from "nock";
-import ext_keypair from "keypair";
-import ext_jws from "jws";
-import imp_GoogleAuth from "../lib/auth/googleauth.js";
-import ext_fs from "fs";
-import ext_assert from "assert";
+"use strict";
+
+var _nock = require("nock");
+
+var _nock2 = _interopRequireDefault(_nock);
+
+var _keypair = require("keypair");
+
+var _keypair2 = _interopRequireDefault(_keypair);
+
+var _jws = require("jws");
+
+var _jws2 = _interopRequireDefault(_jws);
+
+var _googleauth = require("../lib/auth/googleauth.js");
+
+var _googleauth2 = _interopRequireDefault(_googleauth);
+
+var _fs = require("fs");
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _assert = require("assert");
+
+var _assert2 = _interopRequireDefault(_assert);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * Copyright 2013 Google Inc. All Rights Reserved.
  *
@@ -22,12 +44,12 @@ import ext_assert from "assert";
 
 'use strict';
 
-var assert = ext_assert;
-var fs = ext_fs;
-var GoogleAuth = imp_GoogleAuth;
-var jws = ext_jws;
-var keypair = ext_keypair;
-var nock = ext_nock;
+var assert = _assert2.default;
+var fs = _fs2.default;
+var GoogleAuth = _googleauth2.default;
+var jws = _jws2.default;
+var keypair = _keypair2.default;
+var nock = _nock2.default;
 
 nock.disableNetConnect();
 
@@ -42,7 +64,7 @@ function createJSON() {
   };
 }
 
-describe('Initial credentials', function() {
+describe('Initial credentials', function () {
 
   it('should create a dummy refresh token string', function () {
     // It is important that the compute client is created with a refresh token value filled
@@ -51,22 +73,16 @@ describe('Initial credentials', function() {
     var jwt = new auth.JWT();
     assert.equal('jwt-placeholder', jwt.credentials.refresh_token);
   });
-
 });
 
-describe('JWT auth client', function() {
+describe('JWT auth client', function () {
 
-  describe('.authorize', function() {
+  describe('.authorize', function () {
 
-    it('should get an initial access token', function(done) {
+    it('should get an initial access token', function (done) {
       var auth = new GoogleAuth();
-      var jwt = new auth.JWT(
-          'foo@serviceaccount.com',
-          '/path/to/key.pem',
-          null,
-          ['http://bar', 'http://foo'],
-          'bar@subjectaccount.com');
-      jwt.gToken = function(opts) {
+      var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, ['http://bar', 'http://foo'], 'bar@subjectaccount.com');
+      jwt.gToken = function (opts) {
         assert.equal('foo@serviceaccount.com', opts.iss);
         assert.equal('/path/to/key.pem', opts.keyFile);
         assert.deepEqual(['http://bar', 'http://foo'], opts.scope);
@@ -74,12 +90,12 @@ describe('JWT auth client', function() {
         return {
           key: 'private-key-data',
           iss: 'foo@subjectaccount.com',
-          getToken: function(opt_callback) {
+          getToken: function getToken(opt_callback) {
             return opt_callback(null, 'initial-access-token');
           }
         };
       };
-      jwt.authorize(function() {
+      jwt.authorize(function () {
         assert.equal('initial-access-token', jwt.credentials.access_token);
         assert.equal('jwt-placeholder', jwt.credentials.refresh_token);
         assert.equal('private-key-data', jwt.key);
@@ -88,40 +104,29 @@ describe('JWT auth client', function() {
       });
     });
 
-    it('should accept scope as string', function(done) {
+    it('should accept scope as string', function (done) {
       var auth = new GoogleAuth();
-      var jwt = new auth.JWT(
-          'foo@serviceaccount.com',
-          '/path/to/key.pem',
-          null,
-          'http://foo',
-          'bar@subjectaccount.com');
+      var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, 'http://foo', 'bar@subjectaccount.com');
 
-      jwt.gToken = function(opts) {
+      jwt.gToken = function (opts) {
         assert.equal('http://foo', opts.scope);
         done();
         return {
-          getToken: function() {}
+          getToken: function getToken() {}
         };
       };
 
       jwt.authorize();
     });
-
   });
 
-  describe('.getAccessToken', function() {
+  describe('.getAccessToken', function () {
 
-    describe('when scopes are set', function() {
+    describe('when scopes are set', function () {
 
-      it('can get obtain new access token', function(done) {
+      it('can get obtain new access token', function (done) {
         var auth = new GoogleAuth();
-        var jwt = new auth.JWT(
-            'foo@serviceaccount.com',
-            '/path/to/key.pem',
-            null,
-            ['http://bar', 'http://foo'],
-            'bar@subjectaccount.com');
+        var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, ['http://bar', 'http://foo'], 'bar@subjectaccount.com');
 
         jwt.credentials = {
           refresh_token: 'jwt-placeholder'
@@ -129,34 +134,27 @@ describe('JWT auth client', function() {
 
         var want = 'abc123';
         jwt.gtoken = {
-          getToken: function(callback) {
+          getToken: function getToken(callback) {
             return callback(null, want);
           }
         };
 
-        jwt.getAccessToken(function(err, got) {
+        jwt.getAccessToken(function (err, got) {
           assert.strictEqual(null, err, 'no error was expected: got\n' + err);
           assert.strictEqual(want, got, 'the access token was wrong: ' + got);
           done();
         });
       });
-
     });
-
   });
 
-  describe('.getRequestMetadata', function() {
+  describe('.getRequestMetadata', function () {
 
-    describe('when scopes are set', function() {
+    describe('when scopes are set', function () {
 
-      it('can obtain new access token', function(done) {
+      it('can obtain new access token', function (done) {
         var auth = new GoogleAuth();
-        var jwt = new auth.JWT(
-            'foo@serviceaccount.com',
-            '/path/to/key.pem',
-            null,
-            ['http://bar', 'http://foo'],
-            'bar@subjectaccount.com');
+        var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, ['http://bar', 'http://foo'], 'bar@subjectaccount.com');
 
         jwt.credentials = {
           refresh_token: 'jwt-placeholder'
@@ -164,37 +162,30 @@ describe('JWT auth client', function() {
 
         var wanted_token = 'abc123';
         jwt.gtoken = {
-          getToken: function(callback) {
+          getToken: function getToken(callback) {
             return callback(null, wanted_token);
           }
         };
         var want = 'Bearer ' + wanted_token;
         var retValue = 'dummy';
         var unusedUri = null;
-        var res = jwt.getRequestMetadata(unusedUri, function(err, got) {
+        var res = jwt.getRequestMetadata(unusedUri, function (err, got) {
           assert.strictEqual(null, err, 'no error was expected: got\n' + err);
-          assert.strictEqual(want, got.Authorization,
-                             'the authorization header was wrong: ' + got.Authorization);
+          assert.strictEqual(want, got.Authorization, 'the authorization header was wrong: ' + got.Authorization);
           done();
           return retValue;
         });
         assert.strictEqual(res, retValue);
       });
-
     });
 
-    describe('when scopes are not set, but a uri is provided', function() {
+    describe('when scopes are not set, but a uri is provided', function () {
 
-      it('gets a jwt header access token', function(done) {
+      it('gets a jwt header access token', function (done) {
         var keys = keypair(1024 /* bitsize of private key */);
         var email = 'foo@serviceaccount.com';
         var auth = new GoogleAuth();
-        var jwt = new auth.JWT(
-            'foo@serviceaccount.com',
-            null,
-            keys['private'],
-            null,
-            'ignored@subjectaccount.com');
+        var jwt = new auth.JWT('foo@serviceaccount.com', null, keys['private'], null, 'ignored@subjectaccount.com');
 
         jwt.credentials = {
           refresh_token: 'jwt-placeholder'
@@ -202,7 +193,7 @@ describe('JWT auth client', function() {
 
         var testUri = 'http:/example.com/my_test_service';
         var retValue = 'dummy';
-        var res = jwt.getRequestMetadata(testUri, function(err, got) {
+        var res = jwt.getRequestMetadata(testUri, function (err, got) {
           assert.strictEqual(null, err, 'no error was expected: got\n' + err);
           assert.notStrictEqual(null, got, 'the creds should be present');
           var decoded = jws.decode(got.Authorization.replace('Bearer ', ''));
@@ -214,119 +205,91 @@ describe('JWT auth client', function() {
         });
         assert.strictEqual(res, retValue);
       });
-
     });
-
   });
 
-  describe('.request', function() {
+  describe('.request', function () {
 
-    it('should refresh token if missing access token', function(done) {
+    it('should refresh token if missing access token', function (done) {
       var auth = new GoogleAuth();
-      var jwt = new auth.JWT(
-          'foo@serviceaccount.com',
-          '/path/to/key.pem',
-          null,
-          ['http://bar', 'http://foo'],
-          'bar@subjectaccount.com');
+      var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, ['http://bar', 'http://foo'], 'bar@subjectaccount.com');
 
       jwt.credentials = {
         refresh_token: 'jwt-placeholder'
       };
 
       jwt.gtoken = {
-        getToken: function(callback) {
+        getToken: function getToken(callback) {
           callback(null, 'abc123');
         }
       };
 
-      jwt.request({ uri : 'http://bar' }, function() {
+      jwt.request({ uri: 'http://bar' }, function () {
         assert.equal('abc123', jwt.credentials.access_token);
         done();
       });
     });
 
-    it('should refresh token if expired', function(done) {
+    it('should refresh token if expired', function (done) {
       var auth = new GoogleAuth();
-      var jwt = new auth.JWT(
-          'foo@serviceaccount.com',
-          '/path/to/key.pem',
-          null,
-          ['http://bar', 'http://foo'],
-          'bar@subjectaccount.com');
+      var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, ['http://bar', 'http://foo'], 'bar@subjectaccount.com');
 
       jwt.credentials = {
         access_token: 'woot',
         refresh_token: 'jwt-placeholder',
-        expiry_date: (new Date()).getTime() - 1000
+        expiry_date: new Date().getTime() - 1000
       };
 
       jwt.gtoken = {
-        getToken: function(callback) {
+        getToken: function getToken(callback) {
           return callback(null, 'abc123');
         }
       };
 
-      jwt.request({ uri : 'http://bar' }, function() {
+      jwt.request({ uri: 'http://bar' }, function () {
         assert.equal('abc123', jwt.credentials.access_token);
         done();
       });
     });
 
-    it('should refresh token if the server returns 403', function(done) {
-      nock('http://example.com')
-          .log(console.log)
-          .get('/access')
-          .reply(403);
+    it('should refresh token if the server returns 403', function (done) {
+      nock('http://example.com').log(console.log).get('/access').reply(403);
 
       var auth = new GoogleAuth();
-      var jwt = new auth.JWT(
-          'foo@serviceaccount.com',
-          '/path/to/key.pem',
-          null,
-          ['http://example.com'],
-          'bar@subjectaccount.com');
+      var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, ['http://example.com'], 'bar@subjectaccount.com');
 
       jwt.credentials = {
         access_token: 'woot',
         refresh_token: 'jwt-placeholder',
-        expiry_date: (new Date()).getTime() + 5000
+        expiry_date: new Date().getTime() + 5000
       };
 
       jwt.gtoken = {
-        getToken: function(callback) {
+        getToken: function getToken(callback) {
           return callback(null, 'abc123');
         }
       };
 
-      jwt.request({ uri : 'http://example.com/access' }, function() {
+      jwt.request({ uri: 'http://example.com/access' }, function () {
         assert.equal('abc123', jwt.credentials.access_token);
         nock.cleanAll();
         done();
       });
     });
 
-    it('should not refresh if not expired', function(done) {
-      var scope = nock('https://accounts.google.com')
-          .log(console.log)
-          .post('/o/oauth2/token', '*')
-          .reply(200, { access_token: 'abc123', expires_in: 10000 });
+    it('should not refresh if not expired', function (done) {
+      var scope = nock('https://accounts.google.com').log(console.log).post('/o/oauth2/token', '*').reply(200, { access_token: 'abc123', expires_in: 10000 });
 
       var auth = new GoogleAuth();
-      var jwt = new auth.JWT(
-          'foo@serviceaccount.com',
-          '/path/to/key.pem',
-          null,
-          ['http://bar', 'http://foo'],
-          'bar@subjectaccount.com');
+      var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, ['http://bar', 'http://foo'], 'bar@subjectaccount.com');
 
       jwt.credentials = {
         access_token: 'initial-access-token',
         refresh_token: 'jwt-placeholder',
-        expiry_date: (new Date()).getTime() + 5000
+        expiry_date: new Date().getTime() + 5000
       };
 
-      jwt.request({ uri : 'http://bar' }, function() {
+      jwt.request({ uri: 'http://bar' }, function () {
         assert.equal('initial-access-token', jwt.credentials.access_token);
         assert.equal(false, scope.isDone());
         nock.cleanAll();
@@ -334,79 +297,59 @@ describe('JWT auth client', function() {
       });
     });
 
-    it('should assume access token is not expired', function(done) {
-      var scope = nock('https://accounts.google.com')
-          .log(console.log)
-          .post('/o/oauth2/token', '*')
-          .reply(200, { access_token: 'abc123', expires_in: 10000 });
+    it('should assume access token is not expired', function (done) {
+      var scope = nock('https://accounts.google.com').log(console.log).post('/o/oauth2/token', '*').reply(200, { access_token: 'abc123', expires_in: 10000 });
 
       var auth = new GoogleAuth();
-      var jwt = new auth.JWT(
-          'foo@serviceaccount.com',
-          '/path/to/key.pem',
-          null,
-          ['http://bar', 'http://foo'],
-          'bar@subjectaccount.com');
+      var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, ['http://bar', 'http://foo'], 'bar@subjectaccount.com');
 
       jwt.credentials = {
         access_token: 'initial-access-token',
         refresh_token: 'jwt-placeholder'
       };
 
-      jwt.request({ uri : 'http://bar' }, function() {
+      jwt.request({ uri: 'http://bar' }, function () {
         assert.equal('initial-access-token', jwt.credentials.access_token);
         assert.equal(false, scope.isDone());
         nock.cleanAll();
         done();
       });
     });
-
   });
 
-  it('should return expiry_date in milliseconds', function(done) {
+  it('should return expiry_date in milliseconds', function (done) {
     var auth = new GoogleAuth();
-    var jwt = new auth.JWT(
-        'foo@serviceaccount.com',
-        '/path/to/key.pem',
-        null,
-        ['http://bar', 'http://foo'],
-        'bar@subjectaccount.com');
+    var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, ['http://bar', 'http://foo'], 'bar@subjectaccount.com');
 
     jwt.credentials = {
       refresh_token: 'jwt-placeholder'
     };
 
-    var dateInMillis = (new Date()).getTime();
+    var dateInMillis = new Date().getTime();
 
     jwt.gtoken = {
-      getToken: function(callback) {
+      getToken: function getToken(callback) {
         return callback(null, 'token');
       },
       expires_at: dateInMillis
     };
 
-    jwt.refreshToken_({ uri : 'http://bar' }, function(err, creds) {
+    jwt.refreshToken_({ uri: 'http://bar' }, function (err, creds) {
       assert.equal(dateInMillis, creds.expiry_date);
       done();
     });
   });
-
 });
 
-describe('.createScoped', function() {
+describe('.createScoped', function () {
   // set up the auth module.
   var auth;
-  beforeEach(function() {
+  beforeEach(function () {
     auth = new GoogleAuth();
   });
 
-  it('should clone stuff', function() {
-    var jwt = new auth.JWT(
-      'foo@serviceaccount.com',
-      '/path/to/key.pem',
-      null,
-      ['http://bar', 'http://foo'],
-      'bar@subjectaccount.com');
+  it('should clone stuff', function () {
+    var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, ['http://bar', 'http://foo'], 'bar@subjectaccount.com');
 
     var clone = jwt.createScoped('x');
 
@@ -416,25 +359,15 @@ describe('.createScoped', function() {
     assert.equal(jwt.subject, clone.subject);
   });
 
-  it('should handle string scope', function() {
-    var jwt = new auth.JWT(
-      'foo@serviceaccount.com',
-      '/path/to/key.pem',
-      null,
-      ['http://bar', 'http://foo'],
-      'bar@subjectaccount.com');
+  it('should handle string scope', function () {
+    var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, ['http://bar', 'http://foo'], 'bar@subjectaccount.com');
 
     var clone = jwt.createScoped('newscope');
     assert.equal('newscope', clone.scopes);
   });
 
-  it('should handle array scope', function() {
-    var jwt = new auth.JWT(
-      'foo@serviceaccount.com',
-      '/path/to/key.pem',
-      null,
-      ['http://bar', 'http://foo'],
-      'bar@subjectaccount.com');
+  it('should handle array scope', function () {
+    var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, ['http://bar', 'http://foo'], 'bar@subjectaccount.com');
 
     var clone = jwt.createScoped(['gorilla', 'chimpanzee', 'orangutan']);
     assert.equal(3, clone.scopes.length);
@@ -443,31 +376,21 @@ describe('.createScoped', function() {
     assert.equal('orangutan', clone.scopes[2]);
   });
 
-  it('should handle null scope', function() {
-    var jwt = new auth.JWT(
-      'foo@serviceaccount.com',
-      '/path/to/key.pem',
-      null,
-      ['http://bar', 'http://foo'],
-      'bar@subjectaccount.com');
+  it('should handle null scope', function () {
+    var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, ['http://bar', 'http://foo'], 'bar@subjectaccount.com');
 
     var clone = jwt.createScoped();
     assert.equal(null, clone.scopes);
   });
 
-  it('should set scope when scope was null', function() {
-    var jwt = new auth.JWT(
-      'foo@serviceaccount.com',
-      '/path/to/key.pem',
-      null,
-      null,
-      'bar@subjectaccount.com');
+  it('should set scope when scope was null', function () {
+    var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, null, 'bar@subjectaccount.com');
 
     var clone = jwt.createScoped('hi');
     assert.equal('hi', clone.scopes);
   });
 
-  it('should handle nulls', function() {
+  it('should handle nulls', function () {
     var jwt = new auth.JWT();
 
     var clone = jwt.createScoped('hi');
@@ -478,102 +401,65 @@ describe('.createScoped', function() {
     assert.equal('hi', clone.scopes);
   });
 
-  it('should not return the original instance', function() {
-    var jwt = new auth.JWT(
-      'foo@serviceaccount.com',
-      '/path/to/key.pem',
-      null,
-      ['http://bar', 'http://foo'],
-      'bar@subjectaccount.com');
+  it('should not return the original instance', function () {
+    var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, ['http://bar', 'http://foo'], 'bar@subjectaccount.com');
 
     var clone = jwt.createScoped('hi');
     assert.notEqual(jwt, clone);
   });
-
 });
 
-describe('.createScopedRequired', function() {
+describe('.createScopedRequired', function () {
   // set up the auth module.
   var auth;
-  beforeEach(function() {
+  beforeEach(function () {
     auth = new GoogleAuth();
   });
 
   it('should return true when scopes is null', function () {
-    var jwt = new auth.JWT(
-      'foo@serviceaccount.com',
-      '/path/to/key.pem',
-      null,
-      null,
-      'bar@subjectaccount.com');
+    var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, null, 'bar@subjectaccount.com');
 
     assert.equal(true, jwt.createScopedRequired());
   });
 
   it('should return true when scopes is an empty array', function () {
-    var jwt = new auth.JWT(
-      'foo@serviceaccount.com',
-      '/path/to/key.pem',
-      null,
-      [],
-      'bar@subjectaccount.com');
+    var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, [], 'bar@subjectaccount.com');
 
     assert.equal(true, jwt.createScopedRequired());
   });
 
   it('should return true when scopes is an empty string', function () {
-    var jwt = new auth.JWT(
-      'foo@serviceaccount.com',
-      '/path/to/key.pem',
-      null,
-      '',
-      'bar@subjectaccount.com');
+    var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, '', 'bar@subjectaccount.com');
 
     assert.equal(true, jwt.createScopedRequired());
   });
 
   it('should return false when scopes is a filled-in string', function () {
-    var jwt = new auth.JWT(
-      'foo@serviceaccount.com',
-      '/path/to/key.pem',
-      null,
-      'http://foo',
-      'bar@subjectaccount.com');
+    var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, 'http://foo', 'bar@subjectaccount.com');
 
     assert.equal(false, jwt.createScopedRequired());
   });
 
   it('should return false when scopes is a filled-in array', function () {
     var auth = new GoogleAuth();
-    var jwt = new auth.JWT(
-      'foo@serviceaccount.com',
-      '/path/to/key.pem',
-      null,
-      ['http://bar', 'http://foo'],
-      'bar@subjectaccount.com');
+    var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, ['http://bar', 'http://foo'], 'bar@subjectaccount.com');
 
     assert.equal(false, jwt.createScopedRequired());
   });
 
-  it('should return false when scopes is not an array or a string, but can be used as a string',
-    function () {
+  it('should return false when scopes is not an array or a string, but can be used as a string', function () {
 
-      var auth = new GoogleAuth();
-      var jwt = new auth.JWT(
-        'foo@serviceaccount.com',
-        '/path/to/key.pem',
-        null,
-        2,
-        'bar@subjectaccount.com');
+    var auth = new GoogleAuth();
+    var jwt = new auth.JWT('foo@serviceaccount.com', '/path/to/key.pem', null, 2, 'bar@subjectaccount.com');
 
-      assert.equal(false, jwt.createScopedRequired());
-    });
+    assert.equal(false, jwt.createScopedRequired());
+  });
 });
 
 describe('.fromJson', function () {
   // set up the test json and the jwt instance being tested.
   var jwt, json;
-  beforeEach(function() {
+  beforeEach(function () {
     json = createJSON();
     var auth = new GoogleAuth();
     jwt = new auth.JWT();
@@ -650,13 +536,12 @@ describe('.fromJson', function () {
       done();
     });
   });
-
 });
 
 describe('.fromStream', function () {
   // set up the jwt instance being tested.
   var jwt;
-  beforeEach(function() {
+  beforeEach(function () {
     var auth = new GoogleAuth();
     jwt = new auth.JWT();
   });
@@ -690,5 +575,4 @@ describe('.fromStream', function () {
       done();
     });
   });
-
 });

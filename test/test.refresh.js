@@ -1,7 +1,23 @@
-import ext_fs from "fs";
-import ext_nock from "nock";
-import imp_GoogleAuth from "../lib/auth/googleauth.js";
-import ext_assert from "assert";
+"use strict";
+
+var _fs = require("fs");
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _nock = require("nock");
+
+var _nock2 = _interopRequireDefault(_nock);
+
+var _googleauth = require("../lib/auth/googleauth.js");
+
+var _googleauth2 = _interopRequireDefault(_googleauth);
+
+var _assert = require("assert");
+
+var _assert2 = _interopRequireDefault(_assert);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * Copyright 2013 Google Inc. All Rights Reserved.
  *
@@ -20,10 +36,10 @@ import ext_assert from "assert";
 
 'use strict';
 
-var assert = ext_assert;
-var GoogleAuth = imp_GoogleAuth;
-var nock = ext_nock;
-var fs = ext_fs;
+var assert = _assert2.default;
+var GoogleAuth = _googleauth2.default;
+var nock = _nock2.default;
+var fs = _fs2.default;
 
 nock.disableNetConnect();
 
@@ -37,9 +53,7 @@ function createJSON() {
   };
 }
 
-describe('Refresh Token auth client', function() {
-
-});
+describe('Refresh Token auth client', function () {});
 
 describe('.fromJson', function () {
 
@@ -97,7 +111,7 @@ describe('.fromJson', function () {
     });
   });
 
-  it('should create UserRefreshClient with clientId_', function(done) {
+  it('should create UserRefreshClient with clientId_', function (done) {
     var json = createJSON();
     var auth = new GoogleAuth();
     var refresh = new auth.UserRefreshClient();
@@ -108,7 +122,7 @@ describe('.fromJson', function () {
     });
   });
 
-  it('should create UserRefreshClient with clientSecret_', function(done) {
+  it('should create UserRefreshClient with clientSecret_', function (done) {
     var json = createJSON();
     var auth = new GoogleAuth();
     var refresh = new auth.UserRefreshClient();
@@ -119,7 +133,7 @@ describe('.fromJson', function () {
     });
   });
 
-  it('should create UserRefreshClient with _refreshToken', function(done) {
+  it('should create UserRefreshClient with _refreshToken', function (done) {
     var json = createJSON();
     var auth = new GoogleAuth();
     var refresh = new auth.UserRefreshClient();

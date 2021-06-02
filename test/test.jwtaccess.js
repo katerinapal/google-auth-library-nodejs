@@ -1,8 +1,27 @@
-import ext_jws from "jws";
-import ext_keypair from "keypair";
-import imp_GoogleAuth from "../lib/auth/googleauth.js";
-import ext_fs from "fs";
-import ext_assert from "assert";
+"use strict";
+
+var _jws = require("jws");
+
+var _jws2 = _interopRequireDefault(_jws);
+
+var _keypair = require("keypair");
+
+var _keypair2 = _interopRequireDefault(_keypair);
+
+var _googleauth = require("../lib/auth/googleauth.js");
+
+var _googleauth2 = _interopRequireDefault(_googleauth);
+
+var _fs = require("fs");
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _assert = require("assert");
+
+var _assert2 = _interopRequireDefault(_assert);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * Copyright 2013 Google Inc. All Rights Reserved.
  *
@@ -21,12 +40,11 @@ import ext_assert from "assert";
 
 'use strict';
 
-var assert = ext_assert;
-var fs = ext_fs;
-var GoogleAuth = imp_GoogleAuth;
-var keypair = ext_keypair;
-var jws = ext_jws;
-
+var assert = _assert2.default;
+var fs = _fs2.default;
+var GoogleAuth = _googleauth2.default;
+var keypair = _keypair2.default;
+var jws = _jws2.default;
 
 // Creates a standard JSON credentials object for testing.
 function createJSON() {
@@ -39,9 +57,9 @@ function createJSON() {
   };
 }
 
-describe('.getRequestMetadata', function() {
+describe('.getRequestMetadata', function () {
 
-  it('create a signed JWT token as the access token', function(done) {
+  it('create a signed JWT token as the access token', function (done) {
     var keys = keypair(1024 /* bitsize of private key */);
     var testUri = 'http:/example.com/my_test_service';
     var email = 'foo@serviceaccount.com';
@@ -49,7 +67,7 @@ describe('.getRequestMetadata', function() {
     var client = new auth.JWTAccess(email, keys['private']);
 
     var retValue = 'dummy';
-    var expectAuth = function(err, creds) {
+    var expectAuth = function expectAuth(err, creds) {
       assert.strictEqual(null, err, 'no error was expected: got\n' + err);
       assert.notStrictEqual(null, creds, 'an creds object should be present');
       var decoded = jws.decode(creds.Authorization.replace('Bearer ', ''));
@@ -62,26 +80,22 @@ describe('.getRequestMetadata', function() {
     var res = client.getRequestMetadata(testUri, expectAuth);
     assert.strictEqual(res, retValue);
   });
-
 });
 
-describe('.createScopedRequired', function() {
+describe('.createScopedRequired', function () {
 
   it('should return false', function () {
     var auth = new GoogleAuth();
-    var client = new auth.JWTAccess(
-      'foo@serviceaccount.com',
-      null);
+    var client = new auth.JWTAccess('foo@serviceaccount.com', null);
 
     assert.equal(false, client.createScopedRequired());
   });
-
 });
 
 describe('.fromJson', function () {
   // set up the test json and the client instance being tested.
   var json, client;
-  beforeEach(function() {
+  beforeEach(function () {
     json = createJSON();
     var auth = new GoogleAuth();
     client = new auth.JWTAccess();
@@ -134,13 +148,12 @@ describe('.fromJson', function () {
       done();
     });
   });
-
 });
 
 describe('.fromStream', function () {
   // set up the client instance being tested.
   var client;
-  beforeEach(function() {
+  beforeEach(function () {
     var auth = new GoogleAuth();
     client = new auth.JWTAccess();
   });
@@ -170,5 +183,4 @@ describe('.fromStream', function () {
       done();
     });
   });
-
 });

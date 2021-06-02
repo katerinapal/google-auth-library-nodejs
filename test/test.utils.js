@@ -1,5 +1,15 @@
-import imp_utilsjs from "../lib/utils.js";
-import ext_assert from "assert";
+"use strict";
+
+var _utils = require("../lib/utils.js");
+
+var _utils2 = _interopRequireDefault(_utils);
+
+var _assert = require("assert");
+
+var _assert2 = _interopRequireDefault(_assert);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * Copyright 2014 Google Inc. All Rights Reserved.
  *
@@ -18,30 +28,29 @@ import ext_assert from "assert";
 
 'use strict';
 
-var assert = ext_assert;
-var utils = imp_utilsjs;
+var assert = _assert2.default;
+var utils = _utils2.default;
 
-describe('Utils', function() {
+describe('Utils', function () {
 
-  it('should not extend functions on the prototype', function() {
+    it('should not extend functions on the prototype', function () {
 
-    var object = {
-      property: 'test'
-    };
+        var object = {
+            property: 'test'
+        };
 
-    /* jshint ignore:start */
-    Object.prototype.entries = function() {};
-    /* jshint ignore:end */
+        /* jshint ignore:start */
+        Object.prototype.entries = function () {};
+        /* jshint ignore:end */
 
-    var newObject = utils.extend({}, object);
+        var newObject = utils.extend({}, object);
 
-    assert.equal('entries' in newObject, true);
-    assert.equal(newObject.hasOwnProperty('entries'), false);
+        assert.equal('entries' in newObject, true);
+        assert.equal(newObject.hasOwnProperty('entries'), false);
 
-    assert.equal('property' in newObject, true);
-    assert.equal(newObject.hasOwnProperty('property'), true);
+        assert.equal('property' in newObject, true);
+        assert.equal(newObject.hasOwnProperty('property'), true);
 
-    delete Object.prototype.entries;
-  });
-
+        delete Object.prototype.entries;
+    });
 });

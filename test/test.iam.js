@@ -1,5 +1,15 @@
-import imp_GoogleAuth from "../lib/auth/googleauth.js";
-import ext_assert from "assert";
+"use strict";
+
+var _googleauth = require("../lib/auth/googleauth.js");
+
+var _googleauth2 = _interopRequireDefault(_googleauth);
+
+var _assert = require("assert");
+
+var _assert2 = _interopRequireDefault(_assert);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * Copyright 2013 Google Inc. All Rights Reserved.
  *
@@ -18,31 +28,27 @@ import ext_assert from "assert";
 
 'use strict';
 
-var assert = ext_assert;
-var GoogleAuth = imp_GoogleAuth;
+var assert = _assert2.default;
+var GoogleAuth = _googleauth2.default;
 
-describe('.getRequestMetadata', function() {
+describe('.getRequestMetadata', function () {
   var test_selector = 'a-test-selector';
   var test_token = 'a-test-token';
   var client;
-  beforeEach(function() {
+  beforeEach(function () {
     var auth = new GoogleAuth();
     client = new auth.IAMAuth(test_selector, test_token);
   });
 
-  it('passes the token and selector to the callback ', function(done) {
-    var expect_request_metadata = function(err, creds) {
+  it('passes the token and selector to the callback ', function (done) {
+    var expect_request_metadata = function expect_request_metadata(err, creds) {
       assert.strictEqual(err, null, 'no error was expected: got\n' + err);
-      assert.notStrictEqual(creds, null,
-                            'metadata should be present');
-      assert.strictEqual(creds['x-goog-iam-authority-selector'],
-                         test_selector);
-      assert.strictEqual(creds['x-goog-iam-authorization-token'],
-                         test_token);
+      assert.notStrictEqual(creds, null, 'metadata should be present');
+      assert.strictEqual(creds['x-goog-iam-authority-selector'], test_selector);
+      assert.strictEqual(creds['x-goog-iam-authorization-token'], test_token);
       done();
     };
     var unusedUri = null;
     client.getRequestMetadata(unusedUri, expect_request_metadata);
   });
-
 });
