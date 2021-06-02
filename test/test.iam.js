@@ -1,3 +1,5 @@
+import imp_GoogleAuth from "../lib/auth/googleauth.js";
+import ext_assert from "assert";
 /**
  * Copyright 2013 Google Inc. All Rights Reserved.
  *
@@ -16,8 +18,8 @@
 
 'use strict';
 
-var assert = require('assert');
-var GoogleAuth = require('../lib/auth/googleauth.js');
+var assert = ext_assert;
+var GoogleAuth = imp_GoogleAuth;
 
 describe('.getRequestMetadata', function() {
   var test_selector = 'a-test-selector';

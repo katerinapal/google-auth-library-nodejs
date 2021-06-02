@@ -1,3 +1,11 @@
+import imp_AuthClient from "../lib/auth/authclient.js";
+import ext_nock from "nock";
+import ext_crypto from "crypto";
+import imp_GoogleAuth from "../lib/auth/googleauth.js";
+import ext_fs from "fs";
+import ext_querystring from "querystring";
+import ext_assert from "assert";
+import ext_url from "url";
 /**
  * Copyright 2013 Google Inc. All Rights Reserved.
  *
@@ -16,14 +24,14 @@
 
 'use strict';
 
-var url = require('url');
-var assert = require('assert');
-var qs = require('querystring');
-var fs = require('fs');
-var GoogleAuth = require('../lib/auth/googleauth.js');
-var crypto = require('crypto');
-var nock = require('nock');
-var AuthClient = require('../lib/auth/authclient.js');
+var url = ext_url;
+var assert = ext_assert;
+var qs = ext_querystring;
+var fs = ext_fs;
+var GoogleAuth = imp_GoogleAuth;
+var crypto = ext_crypto;
+var nock = ext_nock;
+var AuthClient = imp_AuthClient;
 
 nock.disableNetConnect();
 

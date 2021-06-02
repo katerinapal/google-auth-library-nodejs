@@ -1,65 +1,77 @@
 {
-  "name": "google-auth-library",
-  "version": "0.9.9",
-  "author": "Google Inc.",
-  "description": "Google APIs Authentication Client Library for Node.js",
-  "contributors": [
-    {
-      "name": "Jason Allor",
-      "email": "jasonall@google.com"
+    "name": "google-auth-library",
+    "version": "0.9.9",
+    "author": "Google Inc.",
+    "description": "Google APIs Authentication Client Library for Node.js",
+    "contributors": [
+        {
+            "name": "Jason Allor",
+            "email": "jasonall@google.com"
+        },
+        {
+            "name": "Jason Dobry",
+            "email": "jason.dobry@gmail.com"
+        },
+        {
+            "name": "Tim Emiola",
+            "email": "temiola@google.com"
+        }
+    ],
+    "engines": {
+        "node": ">=0.10"
     },
-    {
-      "name": "Jason Dobry",
-      "email": "jason.dobry@gmail.com"
+    "main": "./lib/auth/googleauth",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/google/google-auth-library-nodejs.git"
     },
-    {
-      "name": "Tim Emiola",
-      "email": "temiola@google.com"
-    }
-  ],
-  "engines": {
-    "node": ">=0.10"
-  },
-  "main": "./lib/auth/googleauth",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/google/google-auth-library-nodejs.git"
-  },
-  "keywords": [
-    "google",
-    "api",
-    "google apis",
-    "client",
-    "client library"
-  ],
-  "dependencies": {
-    "async": "~1.4.2",
-    "gtoken": "^1.1.0",
-    "lodash.noop": "~3.0.0",
-    "jws": "~3.0.0",
-    "request": "~2.74.0",
-    "string-template": "~0.2.0"
-  },
-  "devDependencies": {
-    "coveralls": "^2.11.1",
-    "istanbul": "~0.3.2",
-    "keypair": "~1.0.0",
-    "jshint": "^2.5.5",
-    "jsdoc": "~3.3.0-alpha9",
-    "mkdirp": "~0.5.0",
-    "mocha": "^1.8.1",
-    "nock": "~1.9.0",
-    "rimraf": "^2.2.8",
-    "url": "~0.10.1",
-    "minimist": "^1.1.0"
-  },
-  "scripts": {
-    "lint": "jshint lib test",
-    "test": "mocha --reporter spec --timeout 4000",
-    "generate-docs": "jsdoc -c jsdoc-conf.json ./README.md",
-    "prepare": "npm test && npm run lint && npm version patch",
-    "coverage": "istanbul cover -x 'apis/**' _mocha -- --reporter spec --timeout 4000",
-    "coveralls": "istanbul cover -x 'apis/**' _mocha --report lcovonly -- --reporter spec --timeout 4000 && cat coverage/lcov.info | coveralls"
-  },
-  "license": "Apache-2.0"
+    "keywords": [
+        "google",
+        "api",
+        "google apis",
+        "client",
+        "client library"
+    ],
+    "dependencies": {
+        "async": "~1.4.2",
+        "gtoken": "^1.1.0",
+        "lodash.noop": "~3.0.0",
+        "jws": "~3.0.0",
+        "request": "~2.74.0",
+        "string-template": "~0.2.0"
+    },
+    "devDependencies": {
+        "coveralls": "^2.11.1",
+        "istanbul": "~0.3.2",
+        "keypair": "~1.0.0",
+        "jshint": "^2.5.5",
+        "jsdoc": "~3.3.0-alpha9",
+        "mkdirp": "~0.5.0",
+        "mocha": "^1.8.1",
+        "nock": "~1.9.0",
+        "rimraf": "^2.2.8",
+        "url": "~0.10.1",
+        "minimist": "^1.1.0",
+        "babel-cli": "latest",
+        "babel-core": "latest",
+        "babel-plugin-add-module-exports": "latest",
+        "babel-plugin-transform-es2015-modules-commonjs": "latest",
+        "babel-polyfill": "latest",
+        "babel-plugin-transform-object-rest-spread": "latest",
+        "babel-preset-env": "latest"
+    },
+    "scripts": {
+        "lint": "jshint lib test",
+        "test": "mocha --reporter spec --timeout 4000",
+        "generate-docs": "jsdoc -c jsdoc-conf.json ./README.md",
+        "prepare": "npm test && npm run lint && npm version patch",
+        "coverage": "istanbul cover -x 'apis/**' _mocha -- --reporter spec --timeout 4000",
+        "coveralls": "istanbul cover -x 'apis/**' _mocha --report lcovonly -- --reporter spec --timeout 4000 && cat coverage/lcov.info | coveralls",
+        "compile-libauth": "babel lib\\auth --out-dir lib\\auth --require babel-polyfill --presets env",
+        "compile-test": "babel test --out-dir test --require babel-polyfill --presets env",
+        "compile-lib": "babel lib --out-dir lib --require babel-polyfill --presets env",
+        "compile-1_script": "npm run compile-libauth && npm run compile-test && npm run compile-lib",
+        "compile": "npm run compile-1_script"
+    },
+    "license": "Apache-2.0"
 }

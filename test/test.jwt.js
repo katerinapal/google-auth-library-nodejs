@@ -1,3 +1,9 @@
+import ext_nock from "nock";
+import ext_keypair from "keypair";
+import ext_jws from "jws";
+import imp_GoogleAuth from "../lib/auth/googleauth.js";
+import ext_fs from "fs";
+import ext_assert from "assert";
 /**
  * Copyright 2013 Google Inc. All Rights Reserved.
  *
@@ -16,12 +22,12 @@
 
 'use strict';
 
-var assert = require('assert');
-var fs = require('fs');
-var GoogleAuth = require('../lib/auth/googleauth.js');
-var jws = require('jws');
-var keypair = require('keypair');
-var nock = require('nock');
+var assert = ext_assert;
+var fs = ext_fs;
+var GoogleAuth = imp_GoogleAuth;
+var jws = ext_jws;
+var keypair = ext_keypair;
+var nock = ext_nock;
 
 nock.disableNetConnect();
 

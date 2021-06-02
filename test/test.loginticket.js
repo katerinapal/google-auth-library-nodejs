@@ -1,3 +1,5 @@
+import imp_LoginTicket from "../lib/auth/loginticket.js";
+import ext_assert from "assert";
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
  *
@@ -16,8 +18,8 @@
 
 'use strict';
 
-var assert = require('assert');
-var LoginTicket = require('../lib/auth/loginticket.js');
+var assert = ext_assert;
+var LoginTicket = imp_LoginTicket;
 
 describe('LoginTicket', function() {
 

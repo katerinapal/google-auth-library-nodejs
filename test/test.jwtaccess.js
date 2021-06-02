@@ -1,3 +1,8 @@
+import ext_jws from "jws";
+import ext_keypair from "keypair";
+import imp_GoogleAuth from "../lib/auth/googleauth.js";
+import ext_fs from "fs";
+import ext_assert from "assert";
 /**
  * Copyright 2013 Google Inc. All Rights Reserved.
  *
@@ -16,11 +21,11 @@
 
 'use strict';
 
-var assert = require('assert');
-var fs = require('fs');
-var GoogleAuth = require('../lib/auth/googleauth.js');
-var keypair = require('keypair');
-var jws = require('jws');
+var assert = ext_assert;
+var fs = ext_fs;
+var GoogleAuth = imp_GoogleAuth;
+var keypair = ext_keypair;
+var jws = ext_jws;
 
 
 // Creates a standard JSON credentials object for testing.

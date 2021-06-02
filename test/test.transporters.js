@@ -1,3 +1,6 @@
+import ext_nock from "nock";
+import imp_DefaultTransporter from "../lib/transporters";
+import ext_assert from "assert";
 /**
  * Copyright 2013 Google Inc. All Rights Reserved.
  *
@@ -16,9 +19,9 @@
 
 'use strict';
 
-var assert = require('assert');
-var DefaultTransporter = require('../lib/transporters');
-var nock = require('nock');
+var assert = ext_assert;
+var DefaultTransporter = imp_DefaultTransporter;
+var nock = ext_nock;
 var version = require('../package.json').version;
 
 nock.disableNetConnect();

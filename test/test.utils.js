@@ -1,3 +1,5 @@
+import imp_utilsjs from "../lib/utils.js";
+import ext_assert from "assert";
 /**
  * Copyright 2014 Google Inc. All Rights Reserved.
  *
@@ -16,8 +18,8 @@
 
 'use strict';
 
-var assert = require('assert');
-var utils = require('../lib/utils.js');
+var assert = ext_assert;
+var utils = imp_utilsjs;
 
 describe('Utils', function() {
 
