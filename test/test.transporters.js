@@ -1,6 +1,17 @@
-import ext_assert_assert from "assert";
-import { DefaultTransporter as transporters_DefaultTransporter } from "../lib/transporters";
-import ext_nock_nock from "nock";
+"use strict";
+
+var _assert = require("assert");
+
+var _assert2 = _interopRequireDefault(_assert);
+
+var _transporters = require("../lib/transporters");
+
+var _nock = require("nock");
+
+var _nock2 = _interopRequireDefault(_nock);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * Copyright 2013 Google Inc. All Rights Reserved.
  *
@@ -21,59 +32,56 @@ import ext_nock_nock from "nock";
 
 var version = require('../package.json').version;
 
-ext_nock_nock.disableNetConnect();
+_nock2.default.disableNetConnect();
 
-describe('Transporters', function() {
+describe('Transporters', function () {
 
   var defaultUserAgentRE = 'google-api-nodejs-client/\\d+.\\d+.\\d+';
-  var transporter = new transporters_DefaultTransporter();
+  var transporter = new _transporters.DefaultTransporter();
 
-  it('should set default client user agent if none is set', function() {
+  it('should set default client user agent if none is set', function () {
     var opts = transporter.configure({});
     var re = new RegExp(defaultUserAgentRE);
-    ext_assert_assert(re.test(opts.headers['User-Agent']));
+    (0, _assert2.default)(re.test(opts.headers['User-Agent']));
   });
 
-  it('should append default client user agent to the existing user agent', function() {
+  it('should append default client user agent to the existing user agent', function () {
     var applicationName = 'MyTestApplication-1.0';
     var opts = transporter.configure({
       headers: { 'User-Agent': applicationName }
     });
     var re = new RegExp(applicationName + ' ' + defaultUserAgentRE);
-    ext_assert_assert(re.test(opts.headers['User-Agent']));
+    (0, _assert2.default)(re.test(opts.headers['User-Agent']));
   });
 
-  it('should not append default client user agent to the existing user ' +
-      'agent more than once', function() {
+  it('should not append default client user agent to the existing user ' + 'agent more than once', function () {
     var applicationName = 'MyTestApplication-1.0 google-api-nodejs-client/' + version;
     var opts = transporter.configure({
       headers: { 'User-Agent': applicationName }
     });
-    ext_assert_assert.equal(opts.headers['User-Agent'], applicationName);
+    _assert2.default.equal(opts.headers['User-Agent'], applicationName);
   });
 
-  it('should create a single error from multiple response errors', function(done) {
+  it('should create a single error from multiple response errors', function (done) {
     var firstError = {
       message: 'Error 1'
     };
     var secondError = {
       message: 'Error 2'
     };
-    ext_nock_nock('http://example.com')
-      .get('/api')
-      .reply(400, {
-        error: {
-          code: 500,
-          errors: [ firstError, secondError ]
-        }
-      });
+    (0, _nock2.default)('http://example.com').get('/api').reply(400, {
+      error: {
+        code: 500,
+        errors: [firstError, secondError]
+      }
+    });
 
     transporter.request({
-      uri: 'http://example.com/api',
-    }, function(error) {
-      ext_assert_assert(error.message === 'Error 1\nError 2');
-      ext_assert_assert(error.code, 500);
-      ext_assert_assert(error.errors.length, 2);
+      uri: 'http://example.com/api'
+    }, function (error) {
+      (0, _assert2.default)(error.message === 'Error 1\nError 2');
+      (0, _assert2.default)(error.code, 500);
+      (0, _assert2.default)(error.errors.length, 2);
       done();
     });
   });

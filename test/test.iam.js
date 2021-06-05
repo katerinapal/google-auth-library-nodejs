@@ -1,5 +1,13 @@
-import ext_assert_assert from "assert";
-import { GoogleAuth as googleauth_GoogleAuth } from "../lib/auth/googleauth.js";
+"use strict";
+
+var _assert = require("assert");
+
+var _assert2 = _interopRequireDefault(_assert);
+
+var _googleauth = require("../lib/auth/googleauth.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * Copyright 2013 Google Inc. All Rights Reserved.
  *
@@ -18,28 +26,24 @@ import { GoogleAuth as googleauth_GoogleAuth } from "../lib/auth/googleauth.js";
 
 'use strict';
 
-describe('.getRequestMetadata', function() {
+describe('.getRequestMetadata', function () {
   var test_selector = 'a-test-selector';
   var test_token = 'a-test-token';
   var client;
-  beforeEach(function() {
-    var auth = new googleauth_GoogleAuth();
+  beforeEach(function () {
+    var auth = new _googleauth.GoogleAuth();
     client = new auth.IAMAuth(test_selector, test_token);
   });
 
-  it('passes the token and selector to the callback ', function(done) {
-    var expect_request_metadata = function(err, creds) {
-      ext_assert_assert.strictEqual(err, null, 'no error was expected: got\n' + err);
-      ext_assert_assert.notStrictEqual(creds, null,
-                            'metadata should be present');
-      ext_assert_assert.strictEqual(creds['x-goog-iam-authority-selector'],
-                         test_selector);
-      ext_assert_assert.strictEqual(creds['x-goog-iam-authorization-token'],
-                         test_token);
+  it('passes the token and selector to the callback ', function (done) {
+    var expect_request_metadata = function expect_request_metadata(err, creds) {
+      _assert2.default.strictEqual(err, null, 'no error was expected: got\n' + err);
+      _assert2.default.notStrictEqual(creds, null, 'metadata should be present');
+      _assert2.default.strictEqual(creds['x-goog-iam-authority-selector'], test_selector);
+      _assert2.default.strictEqual(creds['x-goog-iam-authorization-token'], test_token);
       done();
     };
     var unusedUri = null;
     client.getRequestMetadata(unusedUri, expect_request_metadata);
   });
-
 });

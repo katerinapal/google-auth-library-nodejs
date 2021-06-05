@@ -1,5 +1,13 @@
-import ext_assert_assert from "assert";
-import { LoginTicket as loginticket_LoginTicket } from "../lib/auth/loginticket.js";
+"use strict";
+
+var _assert = require("assert");
+
+var _assert2 = _interopRequireDefault(_assert);
+
+var _loginticket = require("../lib/auth/loginticket.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
  *
@@ -18,25 +26,23 @@ import { LoginTicket as loginticket_LoginTicket } from "../lib/auth/loginticket.
 
 'use strict';
 
-describe('LoginTicket', function() {
+describe('LoginTicket', function () {
 
-  it('should return null userId even if no payload', function() {
-    var ticket = new loginticket_LoginTicket(null, null);
-    ext_assert_assert.equal(ticket.getUserId(), null);
+  it('should return null userId even if no payload', function () {
+    var ticket = new _loginticket.LoginTicket(null, null);
+    _assert2.default.equal(ticket.getUserId(), null);
   });
 
-  it('should return envelope', function() {
-    var ticket = new loginticket_LoginTicket('myenvelope');
-    ext_assert_assert.equal(ticket.getEnvelope(), 'myenvelope');
+  it('should return envelope', function () {
+    var ticket = new _loginticket.LoginTicket('myenvelope');
+    _assert2.default.equal(ticket.getEnvelope(), 'myenvelope');
   });
 
-  it('should return attributes from getAttributes', function() {
-    var ticket = new loginticket_LoginTicket('myenvelope', 'mypayload');
-    ext_assert_assert.deepEqual(ticket.getAttributes(), {
+  it('should return attributes from getAttributes', function () {
+    var ticket = new _loginticket.LoginTicket('myenvelope', 'mypayload');
+    _assert2.default.deepEqual(ticket.getAttributes(), {
       envelope: 'myenvelope',
       payload: 'mypayload'
     });
-
   });
-
 });

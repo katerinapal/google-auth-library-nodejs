@@ -1,7 +1,21 @@
-import ext_assert_assert from "assert";
-import { GoogleAuth as googleauth_GoogleAuth } from "../lib/auth/googleauth.js";
-import ext_nock_nock from "nock";
-import ext_fs_fs from "fs";
+"use strict";
+
+var _assert = require("assert");
+
+var _assert2 = _interopRequireDefault(_assert);
+
+var _googleauth = require("../lib/auth/googleauth.js");
+
+var _nock = require("nock");
+
+var _nock2 = _interopRequireDefault(_nock);
+
+var _fs = require("fs");
+
+var _fs2 = _interopRequireDefault(_fs);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * Copyright 2013 Google Inc. All Rights Reserved.
  *
@@ -20,7 +34,7 @@ import ext_fs_fs from "fs";
 
 'use strict';
 
-ext_nock_nock.disableNetConnect();
+_nock2.default.disableNetConnect();
 
 // Creates a standard JSON credentials object for testing.
 function createJSON() {
@@ -32,26 +46,24 @@ function createJSON() {
   };
 }
 
-describe('Refresh Token auth client', function() {
-
-});
+describe('Refresh Token auth client', function () {});
 
 describe('.fromJson', function () {
 
   it('should error on null json', function (done) {
-    var auth = new googleauth_GoogleAuth();
+    var auth = new _googleauth.GoogleAuth();
     var refresh = new auth.UserRefreshClient();
     refresh.fromJSON(null, function (err) {
-      ext_assert_assert.equal(true, err instanceof Error);
+      _assert2.default.equal(true, err instanceof Error);
       done();
     });
   });
 
   it('should error on empty json', function (done) {
-    var auth = new googleauth_GoogleAuth();
+    var auth = new _googleauth.GoogleAuth();
     var refresh = new auth.UserRefreshClient();
     refresh.fromJSON({}, function (err) {
-      ext_assert_assert.equal(true, err instanceof Error);
+      _assert2.default.equal(true, err instanceof Error);
       done();
     });
   });
@@ -60,10 +72,10 @@ describe('.fromJson', function () {
     var json = createJSON();
     delete json.client_id;
 
-    var auth = new googleauth_GoogleAuth();
+    var auth = new _googleauth.GoogleAuth();
     var refresh = new auth.UserRefreshClient();
     refresh.fromJSON(json, function (err) {
-      ext_assert_assert.equal(true, err instanceof Error);
+      _assert2.default.equal(true, err instanceof Error);
       done();
     });
   });
@@ -72,10 +84,10 @@ describe('.fromJson', function () {
     var json = createJSON();
     delete json.client_secret;
 
-    var auth = new googleauth_GoogleAuth();
+    var auth = new _googleauth.GoogleAuth();
     var refresh = new auth.UserRefreshClient();
     refresh.fromJSON(json, function (err) {
-      ext_assert_assert.equal(true, err instanceof Error);
+      _assert2.default.equal(true, err instanceof Error);
       done();
     });
   });
@@ -84,43 +96,43 @@ describe('.fromJson', function () {
     var json = createJSON();
     delete json.refresh_token;
 
-    var auth = new googleauth_GoogleAuth();
+    var auth = new _googleauth.GoogleAuth();
     var refresh = new auth.UserRefreshClient();
     refresh.fromJSON(json, function (err) {
-      ext_assert_assert.equal(true, err instanceof Error);
+      _assert2.default.equal(true, err instanceof Error);
       done();
     });
   });
 
-  it('should create UserRefreshClient with clientId_', function(done) {
+  it('should create UserRefreshClient with clientId_', function (done) {
     var json = createJSON();
-    var auth = new googleauth_GoogleAuth();
+    var auth = new _googleauth.GoogleAuth();
     var refresh = new auth.UserRefreshClient();
     refresh.fromJSON(json, function (err) {
-      ext_assert_assert.ifError(err);
-      ext_assert_assert.equal(json.client_id, refresh.clientId_);
+      _assert2.default.ifError(err);
+      _assert2.default.equal(json.client_id, refresh.clientId_);
       done();
     });
   });
 
-  it('should create UserRefreshClient with clientSecret_', function(done) {
+  it('should create UserRefreshClient with clientSecret_', function (done) {
     var json = createJSON();
-    var auth = new googleauth_GoogleAuth();
+    var auth = new _googleauth.GoogleAuth();
     var refresh = new auth.UserRefreshClient();
     refresh.fromJSON(json, function (err) {
-      ext_assert_assert.ifError(err);
-      ext_assert_assert.equal(json.client_secret, refresh.clientSecret_);
+      _assert2.default.ifError(err);
+      _assert2.default.equal(json.client_secret, refresh.clientSecret_);
       done();
     });
   });
 
-  it('should create UserRefreshClient with _refreshToken', function(done) {
+  it('should create UserRefreshClient with _refreshToken', function (done) {
     var json = createJSON();
-    var auth = new googleauth_GoogleAuth();
+    var auth = new _googleauth.GoogleAuth();
     var refresh = new auth.UserRefreshClient();
     refresh.fromJSON(json, function (err) {
-      ext_assert_assert.ifError(err);
-      ext_assert_assert.equal(json.refresh_token, refresh._refreshToken);
+      _assert2.default.ifError(err);
+      _assert2.default.equal(json.refresh_token, refresh._refreshToken);
       done();
     });
   });
@@ -129,32 +141,32 @@ describe('.fromJson', function () {
 describe('.fromStream', function () {
 
   it('should error on null stream', function (done) {
-    var auth = new googleauth_GoogleAuth();
+    var auth = new _googleauth.GoogleAuth();
     var refresh = new auth.UserRefreshClient();
     refresh.fromStream(null, function (err) {
-      ext_assert_assert.equal(true, err instanceof Error);
+      _assert2.default.equal(true, err instanceof Error);
       done();
     });
   });
 
   it('should read the stream and create a UserRefreshClient', function (done) {
     // Read the contents of the file into a json object.
-    var fileContents = ext_fs_fs.readFileSync('./test/fixtures/refresh.json', 'utf-8');
+    var fileContents = _fs2.default.readFileSync('./test/fixtures/refresh.json', 'utf-8');
     var json = JSON.parse(fileContents);
 
     // Now open a stream on the same file.
-    var stream = ext_fs_fs.createReadStream('./test/fixtures/refresh.json');
+    var stream = _fs2.default.createReadStream('./test/fixtures/refresh.json');
 
     // And pass it into the fromStream method.
-    var auth = new googleauth_GoogleAuth();
+    var auth = new _googleauth.GoogleAuth();
     var refresh = new auth.UserRefreshClient();
     refresh.fromStream(stream, function (err) {
-      ext_assert_assert.ifError(err);
+      _assert2.default.ifError(err);
 
       // Ensure that the correct bits were pulled from the stream.
-      ext_assert_assert.equal(json.client_id, refresh.clientId_);
-      ext_assert_assert.equal(json.client_secret, refresh.clientSecret_);
-      ext_assert_assert.equal(json.refresh_token, refresh._refreshToken);
+      _assert2.default.equal(json.client_id, refresh.clientId_);
+      _assert2.default.equal(json.client_secret, refresh.clientSecret_);
+      _assert2.default.equal(json.refresh_token, refresh._refreshToken);
 
       done();
     });
