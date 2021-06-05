@@ -1,3 +1,6 @@
+import ext_assert_assert from "assert";
+import { GoogleAuth as googleauth_GoogleAuth } from "../lib/auth/googleauth.js";
+import ext_nock_nock from "nock";
 /**
  * Copyright 2013 Google Inc. All Rights Reserved.
  *
@@ -16,20 +19,16 @@
 
 'use strict';
 
-var assert = require('assert');
-var GoogleAuth = require('../lib/auth/googleauth.js');
-var nock = require('nock');
-
-nock.disableNetConnect();
+ext_nock_nock.disableNetConnect();
 
 describe('Initial credentials', function() {
 
   it('should create a dummy refresh token string', function () {
     // It is important that the compute client is created with a refresh token value filled
     // in, or else the rest of the logic will not work.
-    var auth = new GoogleAuth();
+    var auth = new googleauth_GoogleAuth();
     var compute = new auth.Compute();
-    assert.equal('compute-placeholder', compute.credentials.refresh_token);
+    ext_assert_assert.equal('compute-placeholder', compute.credentials.refresh_token);
   });
 });
 
@@ -37,53 +36,53 @@ describe('Compute auth client', function() {
   // set up compute client.
   var compute;
   beforeEach(function() {
-    var auth = new GoogleAuth();
+    var auth = new googleauth_GoogleAuth();
     compute = new auth.Compute();
   });
 
   it('should get an access token for the first request', function (done) {
-    var scope = nock('http://metadata.google.internal')
+    var scope = ext_nock_nock('http://metadata.google.internal')
       .get('/computeMetadata/v1beta1/instance/service-accounts/default/token')
       .reply(200, { access_token: 'abc123', expires_in: 10000 });
     compute.request({ uri: 'http://foo' }, function () {
-      assert.equal(compute.credentials.access_token, 'abc123');
+      ext_assert_assert.equal(compute.credentials.access_token, 'abc123');
       scope.done();
       done();
     });
   });
 
   it('should refresh if access token has expired', function (done) {
-    var scope = nock('http://metadata.google.internal')
+    var scope = ext_nock_nock('http://metadata.google.internal')
       .get('/computeMetadata/v1beta1/instance/service-accounts/default/token')
       .reply(200, { access_token: 'abc123', expires_in: 10000 });
     compute.credentials.access_token = 'initial-access-token';
     compute.credentials.expiry_date = (new Date()).getTime() - 10000;
     compute.request({ uri: 'http://foo' }, function () {
-      assert.equal(compute.credentials.access_token, 'abc123');
+      ext_assert_assert.equal(compute.credentials.access_token, 'abc123');
       scope.done();
       done();
     });
   });
 
   it('should not refresh if access token has not expired', function (done) {
-    var scope = nock('http://metadata.google.internal')
+    var scope = ext_nock_nock('http://metadata.google.internal')
       .get('/computeMetadata/v1beta1/instance/service-accounts/default/token')
       .reply(200, { access_token: 'abc123', expires_in: 10000 });
     compute.credentials.access_token = 'initial-access-token';
     compute.credentials.expiry_date = (new Date()).getTime() + 10000;
     compute.request({ uri: 'http://foo' }, function () {
-      assert.equal(compute.credentials.access_token, 'initial-access-token');
-      assert.equal(false, scope.isDone());
-      nock.cleanAll();
+      ext_assert_assert.equal(compute.credentials.access_token, 'initial-access-token');
+      ext_assert_assert.equal(false, scope.isDone());
+      ext_nock_nock.cleanAll();
       done();
     });
   });
 
   describe('.createScopedRequired', function () {
     it('should return false', function () {
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       var compute = new auth.Compute();
-      assert.equal(false, compute.createScopedRequired());
+      ext_assert_assert.equal(false, compute.createScopedRequired());
     });
   });
 
@@ -102,8 +101,8 @@ describe('Compute auth client', function() {
       };
 
       compute.request({ }, function (err, result, response) {
-        assert.equal(403, response.statusCode);
-        assert.equal('A Forbidden error was returned while attempting to retrieve an access ' +
+        ext_assert_assert.equal(403, response.statusCode);
+        ext_assert_assert.equal('A Forbidden error was returned while attempting to retrieve an access ' +
             'token for the Compute Engine built-in service account. This may be because the ' +
             'Compute Engine instance does not have the correct permission scopes specified.',
           err.message);
@@ -125,8 +124,8 @@ describe('Compute auth client', function() {
       };
 
       compute.request({ }, function (err, result, response) {
-        assert.equal(404, response.statusCode);
-        assert.equal('A Not Found error was returned while attempting to retrieve an access' +
+        ext_assert_assert.equal(404, response.statusCode);
+        ext_assert_assert.equal('A Not Found error was returned while attempting to retrieve an access' +
             'token for the Compute Engine built-in service account. This may be because the ' +
             'Compute Engine instance does not have any permission scopes specified.',
           err.message);
@@ -136,7 +135,7 @@ describe('Compute auth client', function() {
 
     it('should return a helpful message on token refresh response.statusCode 403',
       function (done) {
-        nock('http://metadata.google.internal')
+        ext_nock_nock('http://metadata.google.internal')
             .get('/computeMetadata/v1beta1/instance/service-accounts/default/token')
             .reply(403, 'a weird response body');
 
@@ -148,20 +147,20 @@ describe('Compute auth client', function() {
         };
 
         compute.request({ }, function (err, result, response) {
-          assert.equal(403, response.statusCode);
-          assert.equal('A Forbidden error was returned while attempting to retrieve an access ' +
+          ext_assert_assert.equal(403, response.statusCode);
+          ext_assert_assert.equal('A Forbidden error was returned while attempting to retrieve an access ' +
               'token for the Compute Engine built-in service account. This may be because the ' +
               'Compute Engine instance does not have the correct permission scopes specified. ' +
               'Could not refresh access token.',
             err.message);
-          nock.cleanAll();
+          ext_nock_nock.cleanAll();
           done();
         });
       });
 
     it('should return a helpful message on token refresh response.statusCode 404',
       function (done) {
-        nock('http://metadata.google.internal')
+        ext_nock_nock('http://metadata.google.internal')
             .get('/computeMetadata/v1beta1/instance/service-accounts/default/token')
             .reply(404, 'a weird body');
 
@@ -173,8 +172,8 @@ describe('Compute auth client', function() {
         };
 
         compute.request({ }, function (err, result, response) {
-          assert.equal(404, response.statusCode);
-          assert.equal('A Not Found error was returned while attempting to retrieve an access' +
+          ext_assert_assert.equal(404, response.statusCode);
+          ext_assert_assert.equal('A Not Found error was returned while attempting to retrieve an access' +
               'token for the Compute Engine built-in service account. This may be because the ' +
               'Compute Engine instance does not have any permission scopes specified. Could not ' +
               'refresh access token.',

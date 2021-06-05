@@ -1,3 +1,8 @@
+import ext_assert_assert from "assert";
+import { GoogleAuth as googleauth_GoogleAuth } from "../lib/auth/googleauth.js";
+import ext_nock_nock from "nock";
+import ext_fs_fs from "fs";
+import ext_path_path from "path";
 /**
  * Copyright 2014 Google Inc. All Rights Reserved.
  *
@@ -16,13 +21,7 @@
 
 'use strict';
 
-var assert = require('assert');
-var GoogleAuth = require('../lib/auth/googleauth.js');
-var nock = require('nock');
-var fs = require('fs');
-var path = require('path');
-
-nock.disableNetConnect();
+ext_nock_nock.disableNetConnect();
 
 // Creates a standard JSON auth object for testing.
 function createJwtJSON() {
@@ -122,9 +121,9 @@ describe('GoogleAuth', function() {
   describe('.fromJson', function () {
 
     it('should error on null json', function (done) {
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth.fromJSON(null, function (err) {
-        assert.equal(true, err instanceof Error);
+        ext_assert_assert.equal(true, err instanceof Error);
         done();
       });
     });
@@ -132,9 +131,9 @@ describe('GoogleAuth', function() {
     describe('JWT token', function() {
 
       it('should error on empty json', function (done) {
-        var auth = new GoogleAuth();
+        var auth = new googleauth_GoogleAuth();
         auth.fromJSON({}, function (err) {
-          assert.equal(true, err instanceof Error);
+          ext_assert_assert.equal(true, err instanceof Error);
           done();
         });
       });
@@ -143,9 +142,9 @@ describe('GoogleAuth', function() {
         var json = createJwtJSON();
         delete json.client_email;
 
-        var auth = new GoogleAuth();
+        var auth = new googleauth_GoogleAuth();
         auth.fromJSON(json, function (err) {
-          assert.equal(true, err instanceof Error);
+          ext_assert_assert.equal(true, err instanceof Error);
           done();
         });
       });
@@ -154,69 +153,69 @@ describe('GoogleAuth', function() {
         var json = createJwtJSON();
         delete json.private_key;
 
-        var auth = new GoogleAuth();
+        var auth = new googleauth_GoogleAuth();
         auth.fromJSON(json, function (err) {
-          assert.equal(true, err instanceof Error);
+          ext_assert_assert.equal(true, err instanceof Error);
           done();
         });
       });
 
       it('should create JWT with client_email', function (done) {
         var json = createJwtJSON();
-        var auth = new GoogleAuth();
+        var auth = new googleauth_GoogleAuth();
         auth.fromJSON(json, function (err, result) {
-          assert.equal(null, err);
-          assert.equal(json.client_email, result.email);
+          ext_assert_assert.equal(null, err);
+          ext_assert_assert.equal(json.client_email, result.email);
           done();
         });
       });
 
       it('should create JWT with private_key', function (done) {
         var json = createJwtJSON();
-        var auth = new GoogleAuth();
+        var auth = new googleauth_GoogleAuth();
         auth.fromJSON(json, function (err, result) {
-          assert.equal(null, err);
-          assert.equal(json.private_key, result.key);
+          ext_assert_assert.equal(null, err);
+          ext_assert_assert.equal(json.private_key, result.key);
           done();
         });
       });
 
       it('should create JWT with null scopes', function (done) {
         var json = createJwtJSON();
-        var auth = new GoogleAuth();
+        var auth = new googleauth_GoogleAuth();
         auth.fromJSON(json, function (err, result) {
-          assert.equal(null, err);
-          assert.equal(null, result.scopes);
+          ext_assert_assert.equal(null, err);
+          ext_assert_assert.equal(null, result.scopes);
           done();
         });
       });
 
       it('should create JWT with null subject', function (done) {
         var json = createJwtJSON();
-        var auth = new GoogleAuth();
+        var auth = new googleauth_GoogleAuth();
         auth.fromJSON(json, function (err, result) {
-          assert.equal(null, err);
-          assert.equal(null, result.subject);
+          ext_assert_assert.equal(null, err);
+          ext_assert_assert.equal(null, result.subject);
           done();
         });
       });
 
       it('should create JWT with null keyFile', function (done) {
         var json = createJwtJSON();
-        var auth = new GoogleAuth();
+        var auth = new googleauth_GoogleAuth();
         auth.fromJSON(json, function (err, result) {
-          assert.equal(null, err);
-          assert.equal(null, result.keyFile);
+          ext_assert_assert.equal(null, err);
+          ext_assert_assert.equal(null, result.keyFile);
           done();
         });
       });
     });
     describe('Refresh token', function() {
       it('should error on empty json', function (done) {
-        var auth = new GoogleAuth();
+        var auth = new googleauth_GoogleAuth();
         var jwt = new auth.JWT();
         jwt.fromJSON({}, function (err) {
-          assert.equal(true, err instanceof Error);
+          ext_assert_assert.equal(true, err instanceof Error);
           done();
         });
       });
@@ -225,10 +224,10 @@ describe('GoogleAuth', function() {
         var json = createRefreshJSON();
         delete json.client_id;
 
-        var auth = new GoogleAuth();
+        var auth = new googleauth_GoogleAuth();
         var jwt = new auth.JWT();
         jwt.fromJSON(json, function (err) {
-          assert.equal(true, err instanceof Error);
+          ext_assert_assert.equal(true, err instanceof Error);
           done();
         });
       });
@@ -237,10 +236,10 @@ describe('GoogleAuth', function() {
         var json = createRefreshJSON();
         delete json.client_secret;
 
-        var auth = new GoogleAuth();
+        var auth = new googleauth_GoogleAuth();
         var jwt = new auth.JWT();
         jwt.fromJSON(json, function (err) {
-          assert.equal(true, err instanceof Error);
+          ext_assert_assert.equal(true, err instanceof Error);
           done();
         });
       });
@@ -249,10 +248,10 @@ describe('GoogleAuth', function() {
         var json = createRefreshJSON();
         delete json.refresh_token;
 
-        var auth = new GoogleAuth();
+        var auth = new googleauth_GoogleAuth();
         var jwt = new auth.JWT();
         jwt.fromJSON(json, function (err) {
-          assert.equal(true, err instanceof Error);
+          ext_assert_assert.equal(true, err instanceof Error);
           done();
         });
       });
@@ -262,32 +261,32 @@ describe('GoogleAuth', function() {
   describe('.fromStream', function () {
 
     it('should error on null stream', function (done) {
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth.fromStream(null, function (err) {
-        assert.equal(true, err instanceof Error);
+        ext_assert_assert.equal(true, err instanceof Error);
         done();
       });
     });
 
     it('should read the stream and create a jwt', function (done) {
       // Read the contents of the file into a json object.
-      var fileContents = fs.readFileSync('./test/fixtures/private.json', 'utf-8');
+      var fileContents = ext_fs_fs.readFileSync('./test/fixtures/private.json', 'utf-8');
       var json = JSON.parse(fileContents);
 
       // Now open a stream on the same file.
-      var stream = fs.createReadStream('./test/fixtures/private.json');
+      var stream = ext_fs_fs.createReadStream('./test/fixtures/private.json');
 
       // And pass it into the fromStream method.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth.fromStream(stream, function (err, result) {
-        assert.equal(null, err);
+        ext_assert_assert.equal(null, err);
 
         // Ensure that the correct bits were pulled from the stream.
-        assert.equal(json.private_key, result.key);
-        assert.equal(json.client_email, result.email);
-        assert.equal(null, result.keyFile);
-        assert.equal(null, result.subject);
-        assert.equal(null, result.scope);
+        ext_assert_assert.equal(json.private_key, result.key);
+        ext_assert_assert.equal(json.client_email, result.email);
+        ext_assert_assert.equal(null, result.keyFile);
+        ext_assert_assert.equal(null, result.subject);
+        ext_assert_assert.equal(null, result.scope);
 
         done();
       });
@@ -295,21 +294,21 @@ describe('GoogleAuth', function() {
 
     it('should read another stream and create a UserRefreshClient', function(done) {
       // Read the contents of the file into a json object.
-      var fileContents = fs.readFileSync('./test/fixtures/refresh.json', 'utf-8');
+      var fileContents = ext_fs_fs.readFileSync('./test/fixtures/refresh.json', 'utf-8');
       var json = JSON.parse(fileContents);
 
       // Now open a stream on the same file.
-      var stream = fs.createReadStream('./test/fixtures/refresh.json');
+      var stream = ext_fs_fs.createReadStream('./test/fixtures/refresh.json');
 
       // And pass it into the fromStream method.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth.fromStream(stream, function (err, result) {
-        assert.ifError(err);
+        ext_assert_assert.ifError(err);
 
         // Ensure that the correct bits were pulled from the stream.
-        assert.equal(json.client_id, result.clientId_);
-        assert.equal(json.client_secret, result.clientSecret_);
-        assert.equal(json.refresh_token, result._refreshToken);
+        ext_assert_assert.equal(json.client_id, result.clientId_);
+        ext_assert_assert.equal(json.client_secret, result.clientSecret_);
+        ext_assert_assert.equal(json.refresh_token, result._refreshToken);
 
         done();
       });
@@ -319,59 +318,59 @@ describe('GoogleAuth', function() {
   describe('._getApplicationCredentialsFromFilePath', function () {
 
     it('should not error on valid symlink', function (done) {
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth._getApplicationCredentialsFromFilePath('./test/fixtures/goodlink', function (err) {
-        assert.equal(false, err instanceof Error);
+        ext_assert_assert.equal(false, err instanceof Error);
         done();
       });
     });
 
     it('should error on invalid symlink', function (done) {
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth._getApplicationCredentialsFromFilePath('./test/fixtures/badlink', function (err) {
-        assert.equal(true, err instanceof Error);
+        ext_assert_assert.equal(true, err instanceof Error);
         done();
       });
     });
 
     it('should error on valid link to invalid data', function (done) {
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth._getApplicationCredentialsFromFilePath('./test/fixtures/emptylink', function (err) {
-        assert.equal(true, err instanceof Error);
+        ext_assert_assert.equal(true, err instanceof Error);
         done();
       });
     });
 
     it('should error on null file path', function (done) {
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth._getApplicationCredentialsFromFilePath(null, function (err) {
-        assert.equal(true, err instanceof Error);
+        ext_assert_assert.equal(true, err instanceof Error);
         done();
       });
     });
 
     it('should error on empty file path', function (done) {
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth._getApplicationCredentialsFromFilePath('', function (err) {
-        assert.equal(true, err instanceof Error);
+        ext_assert_assert.equal(true, err instanceof Error);
         done();
       });
     });
 
     it('should error on non-string file path', function (done) {
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth._getApplicationCredentialsFromFilePath(2, function (err) {
-        assert.equal(true, err instanceof Error);
+        ext_assert_assert.equal(true, err instanceof Error);
         done();
       });
     });
 
     it('should error on invalid file path', function (done) {
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth._getApplicationCredentialsFromFilePath('./nonexistantfile.json',
         function (err) {
 
-          assert.equal(true, err instanceof Error);
+          ext_assert_assert.equal(true, err instanceof Error);
           done();
         });
     });
@@ -379,21 +378,21 @@ describe('GoogleAuth', function() {
     it('should error on directory', function (done) {
       // Make sure that the following path actually does point to a directory.
       var directory = './test/fixtures';
-      assert.equal(true, fs.lstatSync(directory).isDirectory());
+      ext_assert_assert.equal(true, ext_fs_fs.lstatSync(directory).isDirectory());
 
       // Execute.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth._getApplicationCredentialsFromFilePath(directory,
         function (err) {
 
-          assert.equal(true, err instanceof Error);
+          ext_assert_assert.equal(true, err instanceof Error);
           done();
         });
     });
 
     it('should handle errors thrown from createReadStream', function (done) {
       // Set up a mock to throw from the createReadStream method.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth._createReadStream = function () {
         throw new Error('Hans and Chewbacca');
       };
@@ -401,14 +400,14 @@ describe('GoogleAuth', function() {
       // Execute.
       auth._getApplicationCredentialsFromFilePath('./test/fixtures/private.json', function (err) {
 
-        assert.equal(true, stringEndsWith(err.message, 'Hans and Chewbacca'));
+        ext_assert_assert.equal(true, stringEndsWith(err.message, 'Hans and Chewbacca'));
         done();
       });
     });
 
     it('should handle errors thrown from fromStream', function (done) {
       // Set up a mock to throw from the fromStream method.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth.fromStream = function () {
         throw new Error('Darth Maul');
       };
@@ -416,14 +415,14 @@ describe('GoogleAuth', function() {
       // Execute.
       auth._getApplicationCredentialsFromFilePath('./test/fixtures/private.json', function (err) {
 
-        assert.equal(true, stringEndsWith(err.message, 'Darth Maul'));
+        ext_assert_assert.equal(true, stringEndsWith(err.message, 'Darth Maul'));
         done();
       });
     });
 
     it('should handle errors passed from fromStream', function (done) {
       // Set up a mock to return an error from the fromStream method.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth.fromStream = function (stream, callback) {
         callback(new Error('Princess Leia'));
       };
@@ -431,27 +430,27 @@ describe('GoogleAuth', function() {
       // Execute.
       auth._getApplicationCredentialsFromFilePath('./test/fixtures/private.json', function (err) {
 
-        assert.equal(true, stringEndsWith(err.message, 'Princess Leia'));
+        ext_assert_assert.equal(true, stringEndsWith(err.message, 'Princess Leia'));
         done();
       });
     });
 
     it('should correctly read the file and create a valid JWT', function (done) {
       // Read the contents of the file into a json object.
-      var fileContents = fs.readFileSync('./test/fixtures/private.json', 'utf-8');
+      var fileContents = ext_fs_fs.readFileSync('./test/fixtures/private.json', 'utf-8');
       var json = JSON.parse(fileContents);
 
       // Now pass the same path to the auth loader.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       auth._getApplicationCredentialsFromFilePath('./test/fixtures/private.json',
         function (err, result) {
 
-          assert.equal(null, err);
-          assert.equal(json.private_key, result.key);
-          assert.equal(json.client_email, result.email);
-          assert.equal(null, result.keyFile);
-          assert.equal(null, result.subject);
-          assert.equal(null, result.scope);
+          ext_assert_assert.equal(null, err);
+          ext_assert_assert.equal(json.private_key, result.key);
+          ext_assert_assert.equal(json.client_email, result.email);
+          ext_assert_assert.equal(null, result.keyFile);
+          ext_assert_assert.equal(null, result.subject);
+          ext_assert_assert.equal(null, result.scope);
           done();
         });
     });
@@ -461,7 +460,7 @@ describe('GoogleAuth', function() {
 
     it('should return false when env var is not set', function (done) {
       // Set up a mock to return a null path string.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       insertEnvironmentVariableIntoAuth(auth, 'GOOGLE_APPLICATION_CREDENTIALS', null);
 
       // The test ends successfully after 1 step has completed.
@@ -472,13 +471,13 @@ describe('GoogleAuth', function() {
         step(); // This should not get called.
       });
 
-      assert.equal(false, handled);
+      ext_assert_assert.equal(false, handled);
       step(); // This should get called.
     });
 
     it('should return false when env var is empty string', function (done) {
       // Set up a mock to return an empty path string.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       insertEnvironmentVariableIntoAuth(auth, 'GOOGLE_APPLICATION_CREDENTIALS', '');
 
       // The test ends successfully after 1 step has completed.
@@ -489,13 +488,13 @@ describe('GoogleAuth', function() {
         step(); // This should not get called.
       });
 
-      assert.equal(false, handled);
+      ext_assert_assert.equal(false, handled);
       step(); // This should get called.
     });
 
     it('should handle invalid environment variable', function (done) {
       // Set up a mock to return a path to an invalid file.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       insertEnvironmentVariableIntoAuth(auth, 'GOOGLE_APPLICATION_CREDENTIALS',
         './nonexistantfile.json');
 
@@ -504,22 +503,22 @@ describe('GoogleAuth', function() {
 
       // Execute.
       var handled = auth._tryGetApplicationCredentialsFromEnvironmentVariable(function (err) {
-        assert.equal(true, err instanceof Error);
+        ext_assert_assert.equal(true, err instanceof Error);
         step();
       });
 
-      assert.equal(true, handled);
+      ext_assert_assert.equal(true, handled);
       step();
     });
 
     it('should handle valid environment variable', function (done) {
       // Set up a mock to return path to a valid credentials file.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       insertEnvironmentVariableIntoAuth(auth, 'GOOGLE_APPLICATION_CREDENTIALS',
         './test/fixtures/private.json');
 
       // Read the contents of the file into a json object.
-      var fileContents = fs.readFileSync('./test/fixtures/private.json', 'utf-8');
+      var fileContents = ext_fs_fs.readFileSync('./test/fixtures/private.json', 'utf-8');
       var json = JSON.parse(fileContents);
 
       // The test ends successfully after 2 steps have completed.
@@ -528,16 +527,16 @@ describe('GoogleAuth', function() {
       // Execute.
       var handled = auth._tryGetApplicationCredentialsFromEnvironmentVariable(
         function (err, result) {
-        assert.equal(null, err);
-        assert.equal(json.private_key, result.key);
-        assert.equal(json.client_email, result.email);
-        assert.equal(null, result.keyFile);
-        assert.equal(null, result.subject);
-        assert.equal(null, result.scope);
+        ext_assert_assert.equal(null, err);
+        ext_assert_assert.equal(json.private_key, result.key);
+        ext_assert_assert.equal(json.client_email, result.email);
+        ext_assert_assert.equal(null, result.keyFile);
+        ext_assert_assert.equal(null, result.subject);
+        ext_assert_assert.equal(null, result.scope);
         step();
       });
 
-      assert.equal(true, handled);
+      ext_assert_assert.equal(true, handled);
       step();
     });
   });
@@ -548,7 +547,7 @@ describe('GoogleAuth', function() {
       var correctLocation = false;
 
       // Set up mocks.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       blockGoogleApplicationCredentialEnvironmentVariable(auth);
       insertEnvironmentVariableIntoAuth(auth, 'APPDATA', 'foo');
       auth._pathJoin = pathJoin;
@@ -564,15 +563,15 @@ describe('GoogleAuth', function() {
       // Execute.
       var handled = auth._tryGetApplicationCredentialsFromWellKnownFile();
 
-      assert.equal(true, handled);
-      assert.equal(true, correctLocation);
+      ext_assert_assert.equal(true, handled);
+      ext_assert_assert.equal(true, correctLocation);
     });
 
     it('should build the correct directory for non-Windows', function () {
       var correctLocation = false;
 
       // Set up mocks.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       blockGoogleApplicationCredentialEnvironmentVariable(auth);
       insertEnvironmentVariableIntoAuth(auth, 'HOME', 'foo');
       auth._pathJoin = pathJoin;
@@ -589,13 +588,13 @@ describe('GoogleAuth', function() {
       // Execute.
       var handled = auth._tryGetApplicationCredentialsFromWellKnownFile();
 
-      assert.equal(true, handled);
-      assert.equal(true, correctLocation);
+      ext_assert_assert.equal(true, handled);
+      ext_assert_assert.equal(true, correctLocation);
     });
 
     it('should fail on Windows when APPDATA is not defined', function (done) {
       // Set up mocks.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       blockGoogleApplicationCredentialEnvironmentVariable(auth);
       insertEnvironmentVariableIntoAuth(auth, 'APPDATA', null);
       auth._pathJoin = pathJoin;
@@ -611,13 +610,13 @@ describe('GoogleAuth', function() {
         step(); // Should not get called.
       });
 
-      assert.equal(false, handled);
+      ext_assert_assert.equal(false, handled);
       step(); // Should get called.
     });
 
     it('should fail on non-Windows when HOME is not defined', function (done) {
       // Set up mocks.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       blockGoogleApplicationCredentialEnvironmentVariable(auth);
       insertEnvironmentVariableIntoAuth(auth, 'HOME', null);
       auth._pathJoin = pathJoin;
@@ -633,13 +632,13 @@ describe('GoogleAuth', function() {
         step(); // Should not get called.
       });
 
-      assert.equal(false, handled);
+      ext_assert_assert.equal(false, handled);
       step(); // Should get called.
     });
 
     it('should fail on Windows when file does not exist', function (done) {
       // Set up mocks.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       blockGoogleApplicationCredentialEnvironmentVariable(auth);
       insertEnvironmentVariableIntoAuth(auth, 'APPDATA', 'foo');
       auth._pathJoin = pathJoin;
@@ -655,13 +654,13 @@ describe('GoogleAuth', function() {
         step(); // Should not get called.
       });
 
-      assert.equal(false, handled);
+      ext_assert_assert.equal(false, handled);
       step(); // Should get called.
     });
 
     it('should fail on non-Windows when file does not exist', function (done) {
       // Set up mocks.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       blockGoogleApplicationCredentialEnvironmentVariable(auth);
       insertEnvironmentVariableIntoAuth(auth, 'HOME', 'foo');
       auth._pathJoin = pathJoin;
@@ -677,14 +676,14 @@ describe('GoogleAuth', function() {
         step(); // Should not get called.
       });
 
-      assert.equal(false, handled);
+      ext_assert_assert.equal(false, handled);
       step(); // Should get called.
     });
   });
 
   it('should succeeds on Windows', function (done) {
     // Set up mocks.
-    var auth = new GoogleAuth();
+    var auth = new googleauth_GoogleAuth();
     blockGoogleApplicationCredentialEnvironmentVariable(auth);
     insertEnvironmentVariableIntoAuth(auth, 'APPDATA', 'foo');
     auth._pathJoin = pathJoin;
@@ -700,18 +699,18 @@ describe('GoogleAuth', function() {
 
     // Execute.
     var handled = auth._tryGetApplicationCredentialsFromWellKnownFile(function (err, result) {
-      assert.equal(null, err);
-      assert.equal('hello', result);
+      ext_assert_assert.equal(null, err);
+      ext_assert_assert.equal('hello', result);
       step();
     });
 
-    assert.equal(true, handled);
+    ext_assert_assert.equal(true, handled);
     step();
   });
 
   it('should succeeds on non-Windows', function (done) {
     // Set up mocks.
-    var auth = new GoogleAuth();
+    var auth = new googleauth_GoogleAuth();
     blockGoogleApplicationCredentialEnvironmentVariable(auth);
     insertEnvironmentVariableIntoAuth(auth, 'HOME', 'foo');
     auth._pathJoin = pathJoin;
@@ -727,18 +726,18 @@ describe('GoogleAuth', function() {
 
     // Execute.
     var handled = auth._tryGetApplicationCredentialsFromWellKnownFile(function (err, result) {
-      assert.equal(null, err);
-      assert.equal('hello', result);
+      ext_assert_assert.equal(null, err);
+      ext_assert_assert.equal('hello', result);
       step();
     });
 
-    assert.equal(true, handled);
+    ext_assert_assert.equal(true, handled);
     step();
   });
 
   it('should pass along a failure on Windows', function (done) {
     // Set up mocks.
-    var auth = new GoogleAuth();
+    var auth = new googleauth_GoogleAuth();
     blockGoogleApplicationCredentialEnvironmentVariable(auth);
     insertEnvironmentVariableIntoAuth(auth, 'APPDATA', 'foo');
     auth._pathJoin = pathJoin;
@@ -754,18 +753,18 @@ describe('GoogleAuth', function() {
 
     // Execute.
     var handled = auth._tryGetApplicationCredentialsFromWellKnownFile(function (err, result) {
-      assert.equal('hello', err.message);
-      assert.equal(null, result);
+      ext_assert_assert.equal('hello', err.message);
+      ext_assert_assert.equal(null, result);
       step();
     });
 
-    assert.equal(true, handled);
+    ext_assert_assert.equal(true, handled);
     step();
   });
 
   it('should pass along a failure on non-Windows', function (done) {
     // Set up mocks.
-    var auth = new GoogleAuth();
+    var auth = new googleauth_GoogleAuth();
     blockGoogleApplicationCredentialEnvironmentVariable(auth);
     insertEnvironmentVariableIntoAuth(auth, 'HOME', 'foo');
     auth._pathJoin = pathJoin;
@@ -781,12 +780,12 @@ describe('GoogleAuth', function() {
 
     // Execute.
     var handled = auth._tryGetApplicationCredentialsFromWellKnownFile(function (err, result) {
-      assert.equal('hello', err.message);
-      assert.equal(null, result);
+      ext_assert_assert.equal('hello', err.message);
+      ext_assert_assert.equal(null, result);
       step();
     });
 
-    assert.equal(true, handled);
+    ext_assert_assert.equal(true, handled);
     step();
   });
 
@@ -809,13 +808,13 @@ describe('GoogleAuth', function() {
         };
 
         // Set up a new GoogleAuth and prepare it for local environment variable handling.
-        var auth = new GoogleAuth();
+        var auth = new googleauth_GoogleAuth();
         setUpAuthForEnvironmentVariable(auth);
 
         // Ask for credentials, the first time.
         auth.getDefaultProjectId(function (err, _projectId) {
-          assert.equal(null, err);
-          assert.equal(_projectId, projectId);
+          ext_assert_assert.equal(null, err);
+          ext_assert_assert.equal(_projectId, projectId);
 
           // Manually change the value of the cached projectId
           auth._cachedProjectId = 'monkey';
@@ -826,25 +825,25 @@ describe('GoogleAuth', function() {
           // Ask for projectId again, from the same auth instance. We expect a cached instance
           // this time.
           auth.getDefaultProjectId(function (err2, _projectId2) {
-            assert.equal(null, err2);
+            ext_assert_assert.equal(null, err2);
 
             // Make sure we get the changed cached projectId back
-            assert.equal('monkey', _projectId2);
+            ext_assert_assert.equal('monkey', _projectId2);
 
             // Now create a second GoogleAuth instance, and ask for projectId. We should
             // get a new projectId instance this time.
-            var auth2 = new GoogleAuth();
+            var auth2 = new googleauth_GoogleAuth();
             setUpAuthForEnvironmentVariable(auth2);
 
             // Step 2 has completed.
             step();
 
             auth2.getDefaultProjectId(function (err3, _projectId3) {
-              assert.equal(null, err3);
-              assert.equal(_projectId3, projectId);
+              ext_assert_assert.equal(null, err3);
+              ext_assert_assert.equal(_projectId3, projectId);
 
               // Make sure we get a new (non-cached) projectId instance back.
-              assert.equal(_projectId3.specialTestBit, undefined);
+              ext_assert_assert.equal(_projectId3.specialTestBit, undefined);
 
               // Step 3 has completed.
               step();
@@ -856,13 +855,13 @@ describe('GoogleAuth', function() {
     it('should use GCLOUD_PROJECT environment variable when it is set', function (done) {
       var projectId = 'my-awesome-project';
 
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       insertEnvironmentVariableIntoAuth(auth, 'GCLOUD_PROJECT', projectId);
 
       // Execute.
       auth.getDefaultProjectId(function (err, _projectId) {
-        assert.equal(err, null);
-        assert.equal(_projectId, projectId);
+        ext_assert_assert.equal(err, null);
+        ext_assert_assert.equal(_projectId, projectId);
         done();
       });
     });
@@ -870,13 +869,13 @@ describe('GoogleAuth', function() {
     it('should use GOOGLE_CLOUD_PROJECT environment variable when it is set', function (done) {
       var projectId = 'my-awesome-project';
 
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       insertEnvironmentVariableIntoAuth(auth, 'GOOGLE_CLOUD_PROJECT', projectId);
 
       // Execute.
       auth.getDefaultProjectId(function (err, _projectId) {
-        assert.equal(err, null);
-        assert.equal(_projectId, projectId);
+        ext_assert_assert.equal(err, null);
+        ext_assert_assert.equal(_projectId, projectId);
         done();
       });
     });
@@ -884,17 +883,17 @@ describe('GoogleAuth', function() {
     it('should use GOOGLE_APPLICATION_CREDENTIALS file when it is available', function (done) {
       var projectId = 'my-awesome-project';
 
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       insertEnvironmentVariableIntoAuth(
         auth,
         'GOOGLE_APPLICATION_CREDENTIALS',
-        path.join(__dirname, 'fixtures/private2.json')
+        ext_path_path.join(__dirname, 'fixtures/private2.json')
       );
 
       // Execute.
       auth.getDefaultProjectId(function (err, _projectId) {
-        assert.equal(err, null);
-        assert.equal(_projectId, projectId);
+        ext_assert_assert.equal(err, null);
+        ext_assert_assert.equal(_projectId, projectId);
         done();
       });
     });
@@ -906,7 +905,7 @@ describe('GoogleAuth', function() {
       // * Environment variable is not set.
       // * Well-known file is set up to point to private2.json
       // * Running on GCE is set to true.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       blockGoogleApplicationCredentialEnvironmentVariable(auth);
       auth._getSDKDefaultProjectId = function(callback) {
         callback(null, JSON.stringify({
@@ -918,15 +917,15 @@ describe('GoogleAuth', function() {
 
       // Execute.
       auth.getDefaultProjectId(function (err, _projectId) {
-        assert.equal(err, null);
-        assert.equal(_projectId, projectId);
+        ext_assert_assert.equal(err, null);
+        ext_assert_assert.equal(_projectId, projectId);
         done();
       });
     });
 
     it('should use GCE when well-known file and env var are not set', function (done) {
       var projectId = 'my-awesome-project';
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       blockGoogleApplicationCredentialEnvironmentVariable(auth);
       auth._getSDKDefaultProjectId = function(callback) {
         callback(null, '');
@@ -940,8 +939,8 @@ describe('GoogleAuth', function() {
 
       // Execute.
       auth.getDefaultProjectId(function (err, _projectId) {
-        assert.equal(err, null);
-        assert.equal(_projectId, projectId);
+        ext_assert_assert.equal(err, null);
+        ext_assert_assert.equal(_projectId, projectId);
         done();
       });
     });
@@ -966,20 +965,20 @@ describe('GoogleAuth', function() {
         };
 
         // Set up a new GoogleAuth and prepare it for local environment variable handling.
-        var auth = new GoogleAuth();
+        var auth = new googleauth_GoogleAuth();
         setUpAuthForEnvironmentVariable(auth);
 
         // Ask for credentials, the first time.
         auth.getApplicationDefault(function (err, result) {
-          assert.equal(null, err);
-          assert.notEqual(null, result);
+          ext_assert_assert.equal(null, err);
+          ext_assert_assert.notEqual(null, result);
 
           // Capture the returned credential.
           var cachedCredential = result;
 
           // Make sure our special test bit is not set yet, indicating that this is a new
           // credentials instance.
-          assert.equal(null, cachedCredential.specialTestBit);
+          ext_assert_assert.equal(null, cachedCredential.specialTestBit);
 
           // Now set the special test bit.
           cachedCredential.specialTestBit = 'monkey';
@@ -990,29 +989,29 @@ describe('GoogleAuth', function() {
           // Ask for credentials again, from the same auth instance. We expect a cached instance
           // this time.
           auth.getApplicationDefault(function (err2, result2) {
-            assert.equal(null, err2);
-            assert.notEqual(null, result2);
+            ext_assert_assert.equal(null, err2);
+            ext_assert_assert.notEqual(null, result2);
 
             // Make sure the special test bit is set on the credentials we got back, indicating
             // that we got cached credentials. Also make sure the object instance is the same.
-            assert.equal('monkey', result2.specialTestBit);
-            assert.equal(cachedCredential, result2);
+            ext_assert_assert.equal('monkey', result2.specialTestBit);
+            ext_assert_assert.equal(cachedCredential, result2);
 
             // Now create a second GoogleAuth instance, and ask for credentials. We should
             // get a new credentials instance this time.
-            var auth2 = new GoogleAuth();
+            var auth2 = new googleauth_GoogleAuth();
             setUpAuthForEnvironmentVariable(auth2);
 
             // Step 2 has completed.
             step();
 
             auth2.getApplicationDefault(function (err3, result3) {
-              assert.equal(null, err3);
-              assert.notEqual(null, result3);
+              ext_assert_assert.equal(null, err3);
+              ext_assert_assert.notEqual(null, result3);
 
               // Make sure we get a new (non-cached) credential instance back.
-              assert.equal(null, result3.specialTestBit);
-              assert.notEqual(cachedCredential, result3);
+              ext_assert_assert.equal(null, result3.specialTestBit);
+              ext_assert_assert.notEqual(cachedCredential, result3);
 
               // Step 3 has completed.
               step();
@@ -1023,14 +1022,14 @@ describe('GoogleAuth', function() {
 
     it('should use environment variable when it is set', function (done) {
       // We expect private.json to be the file that is used.
-      var fileContents = fs.readFileSync('./test/fixtures/private.json', 'utf-8');
+      var fileContents = ext_fs_fs.readFileSync('./test/fixtures/private.json', 'utf-8');
       var json = JSON.parse(fileContents);
 
       // Set up the creds.
       // * Environment variable is set up to point to private.json
       // * Well-known file is set up to point to private2.json
       // * Running on GCE is set to true.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       insertEnvironmentVariableIntoAuth(auth, 'GOOGLE_APPLICATION_CREDENTIALS',
         './test/fixtures/private.json');
       insertEnvironmentVariableIntoAuth(auth, 'APPDATA', 'foo');
@@ -1043,26 +1042,26 @@ describe('GoogleAuth', function() {
 
       // Execute.
       auth.getApplicationDefault(function (err, result) {
-        assert.equal(null, err);
-        assert.equal(json.private_key, result.key);
-        assert.equal(json.client_email, result.email);
-        assert.equal(null, result.keyFile);
-        assert.equal(null, result.subject);
-        assert.equal(null, result.scope);
+        ext_assert_assert.equal(null, err);
+        ext_assert_assert.equal(json.private_key, result.key);
+        ext_assert_assert.equal(json.client_email, result.email);
+        ext_assert_assert.equal(null, result.keyFile);
+        ext_assert_assert.equal(null, result.subject);
+        ext_assert_assert.equal(null, result.scope);
         done();
       });
     });
 
     it('should use well-known file when it is available and env var is not set', function (done) {
       // We expect private2.json to be the file that is used.
-      var fileContents = fs.readFileSync('./test/fixtures/private2.json', 'utf-8');
+      var fileContents = ext_fs_fs.readFileSync('./test/fixtures/private2.json', 'utf-8');
       var json = JSON.parse(fileContents);
 
       // Set up the creds.
       // * Environment variable is not set.
       // * Well-known file is set up to point to private2.json
       // * Running on GCE is set to true.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       blockGoogleApplicationCredentialEnvironmentVariable(auth);
       insertEnvironmentVariableIntoAuth(auth, 'APPDATA', 'foo');
       auth._pathJoin = pathJoin;
@@ -1074,12 +1073,12 @@ describe('GoogleAuth', function() {
 
       // Execute.
       auth.getApplicationDefault(function (err, result) {
-        assert.equal(null, err);
-        assert.equal(json.private_key, result.key);
-        assert.equal(json.client_email, result.email);
-        assert.equal(null, result.keyFile);
-        assert.equal(null, result.subject);
-        assert.equal(null, result.scope);
+        ext_assert_assert.equal(null, err);
+        ext_assert_assert.equal(json.private_key, result.key);
+        ext_assert_assert.equal(json.client_email, result.email);
+        ext_assert_assert.equal(null, result.keyFile);
+        ext_assert_assert.equal(null, result.subject);
+        ext_assert_assert.equal(null, result.scope);
         done();
       });
     });
@@ -1089,7 +1088,7 @@ describe('GoogleAuth', function() {
       // * Environment variable is not set.
       // * Well-known file is not set.
       // * Running on GCE is set to true.
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
       blockGoogleApplicationCredentialEnvironmentVariable(auth);
       insertEnvironmentVariableIntoAuth(auth, 'APPDATA', 'foo');
       auth._pathJoin = pathJoin;
@@ -1099,10 +1098,10 @@ describe('GoogleAuth', function() {
 
       // Execute.
       auth.getApplicationDefault(function (err, result) {
-        assert.equal(null, err);
+        ext_assert_assert.equal(null, err);
 
         // This indicates that we got a ComputeClient instance back, rather than a JWTClient.
-        assert.equal('compute-placeholder', result.credentials.refresh_token);
+        ext_assert_assert.equal('compute-placeholder', result.credentials.refresh_token);
         done();
       });
     });
@@ -1111,71 +1110,71 @@ describe('GoogleAuth', function() {
   describe('._checkIsGCE', function () {
 
     it('should set the _isGCE flag when running on GCE', function (done) {
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
 
       // Mock the transport layer to return the correct header indicating that
       // we're running on GCE.
       auth.transporter = new MockTransporter(true);
 
       // Assert on the initial values.
-      assert.notEqual(true, auth._isGCE);
-      assert.notEqual(true, auth._checked_isGCE);
+      ext_assert_assert.notEqual(true, auth._isGCE);
+      ext_assert_assert.notEqual(true, auth._checked_isGCE);
 
       // Execute.
       auth._checkIsGCE(function () {
         // Assert that the flags are set.
-        assert.equal(true, auth._isGCE);
-        assert.equal(true, auth._checked_isGCE);
+        ext_assert_assert.equal(true, auth._isGCE);
+        ext_assert_assert.equal(true, auth._checked_isGCE);
 
         done();
       });
     });
 
     it('should not set the _isGCE flag when not running on GCE', function (done) {
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
 
       // Mock the transport layer to indicate that we're not running on GCE.
       auth.transporter = new MockTransporter(false);
 
       // Assert on the initial values.
-      assert.notEqual(true, auth._isGCE);
-      assert.notEqual(true, auth._checked_isGCE);
+      ext_assert_assert.notEqual(true, auth._isGCE);
+      ext_assert_assert.notEqual(true, auth._checked_isGCE);
 
       // Execute.
       auth._checkIsGCE(function () {
         // Assert that the flags are set.
-        assert.equal(false, auth._isGCE);
-        assert.equal(true, auth._checked_isGCE);
+        ext_assert_assert.equal(false, auth._isGCE);
+        ext_assert_assert.equal(true, auth._checked_isGCE);
 
         done();
       });
     });
 
     it('Does not execute the second time when running on GCE', function (done) {
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
 
       // Mock the transport layer to indicate that we're not running on GCE.
       auth.transporter = new MockTransporter(true);
 
       // Assert on the initial values.
-      assert.notEqual(true, auth._checked_isGCE);
-      assert.notEqual(true, auth._isGCE);
-      assert.equal(0, auth.transporter.executionCount);
+      ext_assert_assert.notEqual(true, auth._checked_isGCE);
+      ext_assert_assert.notEqual(true, auth._isGCE);
+      ext_assert_assert.equal(0, auth.transporter.executionCount);
 
       // Execute.
       auth._checkIsGCE(function () {
         // Assert.
-        assert.equal(true, auth._checked_isGCE);
-        assert.equal(true, auth._isGCE);
-        assert.equal(1, auth.transporter.executionCount);
+        ext_assert_assert.equal(true, auth._checked_isGCE);
+        ext_assert_assert.equal(true, auth._isGCE);
+        ext_assert_assert.equal(1, auth.transporter.executionCount);
 
         // Execute a second time, check that we still get the correct values back,
         // but the execution count has not rev'd again, indicating that we
         // got the cached values this time.
         auth._checkIsGCE(function () {
-          assert.equal(true, auth._checked_isGCE);
-          assert.equal(true, auth._isGCE);
-          assert.equal(1, auth.transporter.executionCount);
+          ext_assert_assert.equal(true, auth._checked_isGCE);
+          ext_assert_assert.equal(true, auth._isGCE);
+          ext_assert_assert.equal(1, auth.transporter.executionCount);
         });
 
         done();
@@ -1183,51 +1182,51 @@ describe('GoogleAuth', function() {
     });
 
     it('Does not execute the second time when not running on GCE', function (done) {
-      var auth = new GoogleAuth();
+      var auth = new googleauth_GoogleAuth();
 
       // Mock the transport layer to indicate that we're not running on GCE.
       auth.transporter = new MockTransporter(false);
 
       // Assert on the initial values.
-      assert.notEqual(true, auth._checked_isGCE);
-      assert.notEqual(true, auth._isGCE);
-      assert.equal(0, auth.transporter.executionCount);
+      ext_assert_assert.notEqual(true, auth._checked_isGCE);
+      ext_assert_assert.notEqual(true, auth._isGCE);
+      ext_assert_assert.equal(0, auth.transporter.executionCount);
 
       // Execute.
       auth._checkIsGCE(function () {
         // Assert.
-        assert.equal(true, auth._checked_isGCE);
-        assert.equal(false, auth._isGCE);
-        assert.equal(1, auth.transporter.executionCount);
+        ext_assert_assert.equal(true, auth._checked_isGCE);
+        ext_assert_assert.equal(false, auth._isGCE);
+        ext_assert_assert.equal(1, auth.transporter.executionCount);
 
         // Execute a second time, check that we still get the correct values back,
         // but the execution count has not rev'd again, indicating that we
         // got the cached values this time.
         auth._checkIsGCE(function () {
-          assert.equal(true, auth._checked_isGCE);
-          assert.equal(false, auth._isGCE);
-          assert.equal(1, auth.transporter.executionCount);
+          ext_assert_assert.equal(true, auth._checked_isGCE);
+          ext_assert_assert.equal(false, auth._isGCE);
+          ext_assert_assert.equal(1, auth.transporter.executionCount);
         });
 
         done();
       });
 
       it('Returns false on transport error', function (done) {
-        var auth = new GoogleAuth();
+        var auth = new googleauth_GoogleAuth();
 
         // Mock the transport layer to indicate that we're not running on GCE, but also to
         // throw an error.
         auth.transporter = new MockTransporter(true, true);
 
         // Assert on the initial values.
-        assert.notEqual(true, auth._checked_isGCE);
-        assert.notEqual(true, auth._isGCE);
+        ext_assert_assert.notEqual(true, auth._checked_isGCE);
+        ext_assert_assert.notEqual(true, auth._isGCE);
 
         // Execute.
         auth._checkIsGCE(function () {
           // Assert that _isGCE is set to false due to the error.
-          assert.equal(true, auth._checked_isGCE);
-          assert.equal(false, auth._isGCE);
+          ext_assert_assert.equal(true, auth._checked_isGCE);
+          ext_assert_assert.equal(false, auth._isGCE);
 
           done();
         });

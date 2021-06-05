@@ -1,3 +1,5 @@
+import ext_assert_assert from "assert";
+import { GoogleAuth as googleauth_GoogleAuth } from "../lib/auth/googleauth.js";
 /**
  * Copyright 2013 Google Inc. All Rights Reserved.
  *
@@ -16,26 +18,23 @@
 
 'use strict';
 
-var assert = require('assert');
-var GoogleAuth = require('../lib/auth/googleauth.js');
-
 describe('.getRequestMetadata', function() {
   var test_selector = 'a-test-selector';
   var test_token = 'a-test-token';
   var client;
   beforeEach(function() {
-    var auth = new GoogleAuth();
+    var auth = new googleauth_GoogleAuth();
     client = new auth.IAMAuth(test_selector, test_token);
   });
 
   it('passes the token and selector to the callback ', function(done) {
     var expect_request_metadata = function(err, creds) {
-      assert.strictEqual(err, null, 'no error was expected: got\n' + err);
-      assert.notStrictEqual(creds, null,
+      ext_assert_assert.strictEqual(err, null, 'no error was expected: got\n' + err);
+      ext_assert_assert.notStrictEqual(creds, null,
                             'metadata should be present');
-      assert.strictEqual(creds['x-goog-iam-authority-selector'],
+      ext_assert_assert.strictEqual(creds['x-goog-iam-authority-selector'],
                          test_selector);
-      assert.strictEqual(creds['x-goog-iam-authorization-token'],
+      ext_assert_assert.strictEqual(creds['x-goog-iam-authorization-token'],
                          test_token);
       done();
     };

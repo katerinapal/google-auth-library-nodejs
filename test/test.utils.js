@@ -1,3 +1,5 @@
+import ext_assert_assert from "assert";
+import { utilsjs as utils } from "../lib/utils.js";
 /**
  * Copyright 2014 Google Inc. All Rights Reserved.
  *
@@ -16,9 +18,6 @@
 
 'use strict';
 
-var assert = require('assert');
-var utils = require('../lib/utils.js');
-
 describe('Utils', function() {
 
   it('should not extend functions on the prototype', function() {
@@ -33,11 +32,11 @@ describe('Utils', function() {
 
     var newObject = utils.extend({}, object);
 
-    assert.equal('entries' in newObject, true);
-    assert.equal(newObject.hasOwnProperty('entries'), false);
+    ext_assert_assert.equal('entries' in newObject, true);
+    ext_assert_assert.equal(newObject.hasOwnProperty('entries'), false);
 
-    assert.equal('property' in newObject, true);
-    assert.equal(newObject.hasOwnProperty('property'), true);
+    ext_assert_assert.equal('property' in newObject, true);
+    ext_assert_assert.equal(newObject.hasOwnProperty('property'), true);
 
     delete Object.prototype.entries;
   });

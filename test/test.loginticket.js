@@ -1,3 +1,5 @@
+import ext_assert_assert from "assert";
+import { LoginTicket as loginticket_LoginTicket } from "../lib/auth/loginticket.js";
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
  *
@@ -16,24 +18,21 @@
 
 'use strict';
 
-var assert = require('assert');
-var LoginTicket = require('../lib/auth/loginticket.js');
-
 describe('LoginTicket', function() {
 
   it('should return null userId even if no payload', function() {
-    var ticket = new LoginTicket(null, null);
-    assert.equal(ticket.getUserId(), null);
+    var ticket = new loginticket_LoginTicket(null, null);
+    ext_assert_assert.equal(ticket.getUserId(), null);
   });
 
   it('should return envelope', function() {
-    var ticket = new LoginTicket('myenvelope');
-    assert.equal(ticket.getEnvelope(), 'myenvelope');
+    var ticket = new loginticket_LoginTicket('myenvelope');
+    ext_assert_assert.equal(ticket.getEnvelope(), 'myenvelope');
   });
 
   it('should return attributes from getAttributes', function() {
-    var ticket = new LoginTicket('myenvelope', 'mypayload');
-    assert.deepEqual(ticket.getAttributes(), {
+    var ticket = new loginticket_LoginTicket('myenvelope', 'mypayload');
+    ext_assert_assert.deepEqual(ticket.getAttributes(), {
       envelope: 'myenvelope',
       payload: 'mypayload'
     });

@@ -1,3 +1,6 @@
+import ext_assert_assert from "assert";
+import { DefaultTransporter as transporters_DefaultTransporter } from "../lib/transporters";
+import ext_nock_nock from "nock";
 /**
  * Copyright 2013 Google Inc. All Rights Reserved.
  *
@@ -16,22 +19,19 @@
 
 'use strict';
 
-var assert = require('assert');
-var DefaultTransporter = require('../lib/transporters');
-var nock = require('nock');
 var version = require('../package.json').version;
 
-nock.disableNetConnect();
+ext_nock_nock.disableNetConnect();
 
 describe('Transporters', function() {
 
   var defaultUserAgentRE = 'google-api-nodejs-client/\\d+.\\d+.\\d+';
-  var transporter = new DefaultTransporter();
+  var transporter = new transporters_DefaultTransporter();
 
   it('should set default client user agent if none is set', function() {
     var opts = transporter.configure({});
     var re = new RegExp(defaultUserAgentRE);
-    assert(re.test(opts.headers['User-Agent']));
+    ext_assert_assert(re.test(opts.headers['User-Agent']));
   });
 
   it('should append default client user agent to the existing user agent', function() {
@@ -40,7 +40,7 @@ describe('Transporters', function() {
       headers: { 'User-Agent': applicationName }
     });
     var re = new RegExp(applicationName + ' ' + defaultUserAgentRE);
-    assert(re.test(opts.headers['User-Agent']));
+    ext_assert_assert(re.test(opts.headers['User-Agent']));
   });
 
   it('should not append default client user agent to the existing user ' +
@@ -49,7 +49,7 @@ describe('Transporters', function() {
     var opts = transporter.configure({
       headers: { 'User-Agent': applicationName }
     });
-    assert.equal(opts.headers['User-Agent'], applicationName);
+    ext_assert_assert.equal(opts.headers['User-Agent'], applicationName);
   });
 
   it('should create a single error from multiple response errors', function(done) {
@@ -59,7 +59,7 @@ describe('Transporters', function() {
     var secondError = {
       message: 'Error 2'
     };
-    nock('http://example.com')
+    ext_nock_nock('http://example.com')
       .get('/api')
       .reply(400, {
         error: {
@@ -71,9 +71,9 @@ describe('Transporters', function() {
     transporter.request({
       uri: 'http://example.com/api',
     }, function(error) {
-      assert(error.message === 'Error 1\nError 2');
-      assert(error.code, 500);
-      assert(error.errors.length, 2);
+      ext_assert_assert(error.message === 'Error 1\nError 2');
+      ext_assert_assert(error.code, 500);
+      ext_assert_assert(error.errors.length, 2);
       done();
     });
   });
